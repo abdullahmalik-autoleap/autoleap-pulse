@@ -90,7 +90,7 @@ export default function LoginPage() {
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              placeholder="admin@autoleap.com"
+              placeholder="Email address"
               required
               className="w-full rounded-lg px-3 py-2.5 text-sm text-white placeholder:text-white/25 focus:outline-none focus:ring-2"
               style={{
@@ -115,7 +115,7 @@ export default function LoginPage() {
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              placeholder="••••••••"
+              placeholder="Password"
               required
               className="w-full rounded-lg px-3 py-2.5 text-sm text-white placeholder:text-white/25 focus:outline-none focus:ring-2"
               style={{
@@ -158,7 +158,7 @@ export default function LoginPage() {
           className="mt-6 text-center text-xs"
           style={{ color: "rgba(255,255,255,0.3)" }}
         >
-          admin@autoleap.com / pulse2026
+          AutoLeap Internal Access
         </p>
       </div>
     </div>

@@ -278,8 +278,10 @@ async function main() {
     const ltv = +(rand(1800, 2200)).toFixed(2);
     const paybackPeriod = +(rand(8, 14)).toFixed(1);
 
-    await prisma.revenueSnapshot.create({
-      data: {
+    await prisma.revenueSnapshot.upsert({
+      where: { date },
+      update: {},
+      create: {
         date,
         mrr,
         arr,
@@ -434,8 +436,10 @@ async function main() {
       ? null
       : pickRandom(SUPPORT_AGENTS);
 
-    await prisma.supportTicket.create({
-      data: {
+    await prisma.supportTicket.upsert({
+      where: { ticketNumber },
+      update: {},
+      create: {
         ticketNumber,
         shopName: pickRandom(SHOP_NAMES),
         title: pickRandom(titles),
