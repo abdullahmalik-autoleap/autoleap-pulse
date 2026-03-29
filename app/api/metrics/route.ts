@@ -77,11 +77,13 @@ export async function GET(request: NextRequest) {
     detractors: todayMetric?.detractors ?? 0,
   };
 
-  return NextResponse.json({
+  const res = NextResponse.json({
     today,
     trend,
     npsBreakdown,
     topSupportCategories: supportCategories,
     topFeatureRequests: featureRequests,
   });
+  res.headers.set("Cache-Control", "s-maxage=60, stale-while-revalidate=300");
+  return res;
 }

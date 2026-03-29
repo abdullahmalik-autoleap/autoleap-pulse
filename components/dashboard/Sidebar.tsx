@@ -1,8 +1,10 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { useSession, signOut } from "next-auth/react";
+import { useTheme } from "@/lib/theme";
 import {
   LayoutDashboard,
   UserPlus,
@@ -15,7 +17,7 @@ import {
 } from "lucide-react";
 
 const navItems = [
-  { href: "/dashboard", label: "Overview", icon: LayoutDashboard },
+  { href: "/dashboard/overview", label: "Overview", icon: LayoutDashboard },
   { href: "/dashboard/signups", label: "Signups", icon: UserPlus },
   { href: "/dashboard/revenue", label: "Revenue", icon: TrendingUp },
   { href: "/dashboard/support", label: "Support", icon: Headphones },
@@ -29,10 +31,11 @@ interface SidebarProps {
 
 export function Sidebar({ collapsed, onToggle }: SidebarProps) {
   const pathname = usePathname();
+  const router = useRouter();
   const { data: session } = useSession();
+  const { theme } = useTheme();
 
   function isActive(href: string) {
-    if (href === "/dashboard") return pathname === "/dashboard";
     return pathname.startsWith(href);
   }
 
@@ -50,27 +53,23 @@ export function Sidebar({ collapsed, onToggle }: SidebarProps) {
         style={{ height: 56, borderBottom: "1px solid var(--pulse-border)" }}
       >
         <Link href="/dashboard" className="flex items-center gap-2.5">
-          <div
-            className="flex items-center justify-center rounded-lg text-white font-bold text-[10px] shrink-0"
-            style={{
-              width: 28,
-              height: 28,
-              background: "var(--brand)",
-              fontSize: 10,
-            }}
-          >
-            AL
-          </div>
-          {!collapsed && (
-            <span
-              className="text-sm font-semibold tracking-tight"
-              style={{
-                color: "var(--text-primary)",
-                fontFamily: "var(--font-display)",
-              }}
-            >
-              Pulse
-            </span>
+          {collapsed ? (
+            <Image
+              src="/logos/Compact.svg"
+              alt="AutoLeap Pulse"
+              width={28}
+              height={28}
+              className="shrink-0"
+            />
+          ) : (
+            <Image
+              src={theme === "light" ? "/logos/Light.svg" : "/logos/Dark.svg"}
+              alt="AutoLeap Pulse"
+              width={120}
+              height={28}
+              className="shrink-0"
+              style={{ height: 28, width: "auto" }}
+            />
           )}
         </Link>
       </div>
@@ -84,12 +83,13 @@ export function Sidebar({ collapsed, onToggle }: SidebarProps) {
               href={item.href}
               className={`sidebar-nav-item flex items-center gap-3 rounded-lg px-3 py-2 text-[13px] font-medium transition-all duration-200${collapsed ? " justify-center" : ""}`}
               style={{
-                color: active ? "#fff" : "var(--text-secondary)",
+                color: active ? "var(--active-nav-text)" : "var(--text-secondary)",
                 background: active ? "var(--brand-dim)" : "transparent",
                 borderLeft: active ? "2px solid var(--brand)" : "2px solid transparent",
               }}
               data-tooltip={collapsed ? item.label : undefined}
               onMouseEnter={(e) => {
+                router.prefetch(item.href);
                 if (!active)
                   e.currentTarget.style.background = "var(--surface-2)";
               }}
@@ -119,11 +119,12 @@ export function Sidebar({ collapsed, onToggle }: SidebarProps) {
         {session?.user && !collapsed && (
           <div className="flex items-center gap-2.5 px-3 py-2">
             <div
-              className="flex items-center justify-center rounded-full text-[10px] font-bold text-white shrink-0"
+              className="flex items-center justify-center rounded-full text-[10px] font-bold shrink-0"
               style={{
                 width: 28,
                 height: 28,
                 background: "var(--brand)",
+                color: "var(--active-nav-text)",
               }}
             >
               {(session.user.name?.[0] ?? session.user.email?.[0] ?? "U").toUpperCase()}

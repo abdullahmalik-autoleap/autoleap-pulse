@@ -202,7 +202,7 @@ export async function GET(request: NextRequest) {
     timeAgo: formatDistanceToNow(e.date, { addSuffix: true }),
   }));
 
-  return NextResponse.json({
+  const res = NextResponse.json({
     summary,
     byDay,
     byPlan: byPlan.map((r) => ({
@@ -216,6 +216,8 @@ export async function GET(request: NextRequest) {
     cohortConversion,
     recentSignups,
   });
+  res.headers.set("Cache-Control", "s-maxage=60, stale-while-revalidate=300");
+  return res;
 }
 
 interface GroupRow {

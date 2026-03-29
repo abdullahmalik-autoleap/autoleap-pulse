@@ -262,11 +262,11 @@ export function RevenueMetricsTable({ data, isLoading }: RevenueMetricsTableProp
 
               let rowBg = "transparent";
               if (isCurrent) rowBg = "var(--brand-dim)";
-              else if (isNegativeNet) rowBg = "rgba(239,68,68,0.04)";
+              else if (isNegativeNet) rowBg = "var(--danger-dim)";
 
               let borderLeft = "2px solid transparent";
               if (isCurrent) borderLeft = "2px solid var(--brand)";
-              else if (isBestGrowth) borderLeft = "2px solid #F59E0B";
+              else if (isBestGrowth) borderLeft = "2px solid var(--warning)";
 
               return (
                 <tr

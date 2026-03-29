@@ -64,7 +64,7 @@ export function EmptyState({
             background: "var(--brand-dim)",
             border: "1px solid var(--brand-border)",
           }}
-          onMouseEnter={(e) => (e.currentTarget.style.background = "rgba(14,113,105,0.2)")}
+          onMouseEnter={(e) => (e.currentTarget.style.background = "var(--brand-dim)")}
           onMouseLeave={(e) => (e.currentTarget.style.background = "var(--brand-dim)")}
         >
           Refresh

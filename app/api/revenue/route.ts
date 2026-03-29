@@ -211,7 +211,7 @@ export async function GET(request: NextRequest) {
     };
   });
 
-  return NextResponse.json({
+  const res = NextResponse.json({
     summary,
     mrrTrend,
     mrrWaterfall,
@@ -222,4 +222,6 @@ export async function GET(request: NextRequest) {
     churnProfile,
     monthlyTable,
   });
+  res.headers.set("Cache-Control", "s-maxage=60, stale-while-revalidate=300");
+  return res;
 }

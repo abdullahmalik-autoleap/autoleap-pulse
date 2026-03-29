@@ -15,11 +15,11 @@ import { PageHeader } from "@/components/dashboard/PageHeader";
 import { KPICard } from "@/components/dashboard/KPICard";
 import { KPIGrid } from "@/components/dashboard/KPIGrid";
 import { ErrorCard } from "@/components/dashboard/ErrorCard";
-import { KeyboardShortcutsModal } from "@/components/dashboard/KeyboardShortcutsModal";
 import { SignupTrendChart } from "./SignupTrendChart";
 import { SignupBreakdowns } from "./SignupBreakdowns";
 import { RegionalBreakdown } from "./RegionalBreakdown";
 import { CohortTable } from "./CohortTable";
+import { LazySection } from "@/components/lazy-section";
 
 interface SignupSummary {
   total: number;
@@ -94,25 +94,6 @@ const SIGNUPS_RANGES: { key: DateRange; label: string; shortcut?: string }[] = [
   { key: "12m", label: "12M", shortcut: "1" },
 ];
 
-const SHORTCUT_GROUPS = [
-  {
-    title: "General",
-    shortcuts: [
-      { key: "R", description: "Refresh data" },
-      { key: "?", description: "Show keyboard shortcuts" },
-    ],
-  },
-  {
-    title: "Date Range",
-    shortcuts: [
-      { key: "7", description: "7 days" },
-      { key: "3", description: "30 days" },
-      { key: "9", description: "90 days" },
-      { key: "1", description: "12 months" },
-    ],
-  },
-];
-
 export function SignupsClient() {
   const [dateRange, setDateRange] = useState<DateRange>("30d");
   const [data, setData] = useState<SignupsData | null>(null);
@@ -120,8 +101,6 @@ export function SignupsClient() {
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [lastUpdated, setLastUpdated] = useState<Date | undefined>();
   const [error, setError] = useState<string | null>(null);
-  const [showShortcuts, setShowShortcuts] = useState(false);
-
   const fetchData = useCallback(
     async (range: DateRange, isRangeChange = false) => {
       if (isRangeChange) setIsLoading(true);
@@ -188,10 +167,6 @@ export function SignupsClient() {
           handleRangeChange("12m");
           fetchData("12m", true);
           break;
-        case "?":
-          e.preventDefault();
-          setShowShortcuts((v) => !v);
-          break;
       }
     }
     window.addEventListener("keydown", handleKeyDown);
@@ -222,9 +197,9 @@ export function SignupsClient() {
         style={{
           padding: 24,
           backgroundImage: [
-            "linear-gradient(rgba(255,255,255,0.015) 1px, transparent 1px)",
-            "linear-gradient(90deg, rgba(255,255,255,0.015) 1px, transparent 1px)",
-            "radial-gradient(ellipse 60% 40% at 50% 0%, rgba(14,113,105,0.06) 0%, transparent 70%)",
+            "linear-gradient(var(--page-grid-line) 1px, transparent 1px)",
+            "linear-gradient(90deg, var(--page-grid-line) 1px, transparent 1px)",
+            "radial-gradient(ellipse 60% 40% at 50% 0%, var(--page-grid-glow) 0%, transparent 70%)",
           ].join(", "),
           backgroundSize: "40px 40px, 40px 40px, 100% 100%",
         }}
@@ -307,44 +282,38 @@ export function SignupsClient() {
             </div>
           </div>
 
-          <div className="row-fade-in" style={{ animationDelay: "200ms" }}>
+          <LazySection height={360}>
             <SignupTrendChart
               data={data?.byDay ?? []}
               total={s?.total ?? 0}
               isLoading={isLoading}
             />
-          </div>
+          </LazySection>
 
-          <div className="row-fade-in" style={{ animationDelay: "300ms" }}>
+          <LazySection height={300}>
             <SignupBreakdowns
               bySource={data?.bySource ?? []}
               byPlan={data?.byPlan ?? []}
               byShopType={data?.byShopType ?? []}
               isLoading={isLoading}
             />
-          </div>
+          </LazySection>
 
-          <div className="row-fade-in" style={{ animationDelay: "400ms" }}>
+          <LazySection height={400}>
             <RegionalBreakdown
               data={data?.byRegion ?? []}
               isLoading={isLoading}
             />
-          </div>
+          </LazySection>
 
-          <div className="row-fade-in" style={{ animationDelay: "500ms" }}>
+          <LazySection height={300}>
             <CohortTable
               data={data?.cohortConversion ?? []}
               isLoading={isLoading}
             />
-          </div>
+          </LazySection>
         </div>
       </main>
-
-      <KeyboardShortcutsModal
-        isOpen={showShortcuts}
-        onClose={() => setShowShortcuts(false)}
-        groups={SHORTCUT_GROUPS}
-      />
     </>
   );
 }

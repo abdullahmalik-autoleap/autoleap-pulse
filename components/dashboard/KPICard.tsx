@@ -5,15 +5,15 @@ import { ArrowUp, ArrowDown, type LucideIcon } from "lucide-react";
 import {
   ResponsiveContainer,
   Area,
-  AreaChart,
 } from "recharts";
+import { LazyAreaChart as AreaChart } from "@/components/charts/lazy";
 
 const COLOR_MAP = {
-  brand: { solid: "var(--brand)", dim: "var(--brand-dim)", hex: "#0E7169" },
-  success: { solid: "var(--success)", dim: "var(--success-dim)", hex: "#0E7169" },
-  warning: { solid: "var(--warning)", dim: "var(--warning-dim)", hex: "#F59E0B" },
-  danger: { solid: "var(--danger)", dim: "var(--danger-dim)", hex: "#EF4444" },
-  info: { solid: "var(--info)", dim: "var(--info-dim)", hex: "#3B82F6" },
+  brand: { solid: "var(--brand)", dim: "var(--brand-dim)", hex: "var(--brand)" },
+  success: { solid: "var(--success)", dim: "var(--success-dim)", hex: "var(--brand)" },
+  warning: { solid: "var(--warning)", dim: "var(--warning-dim)", hex: "var(--warning)" },
+  danger: { solid: "var(--danger)", dim: "var(--danger-dim)", hex: "var(--danger)" },
+  info: { solid: "var(--info)", dim: "var(--info-dim)", hex: "var(--info)" },
 } as const;
 
 type CardColor = keyof typeof COLOR_MAP;
@@ -181,8 +181,8 @@ export function KPICard({
         </div>
       )}
 
-      {sparkData && sparkData.length > 1 && !loading && (
-        <div style={{ marginTop: 12, height: 40 }}>
+      <div style={{ marginTop: 12, height: 40 }}>
+        {sparkData && sparkData.length > 1 && !loading && (
           <ResponsiveContainer width="100%" height="100%">
             <AreaChart data={sparkData}>
               <defs>
@@ -199,11 +199,12 @@ export function KPICard({
                 fill={`url(#spark-${label.replace(/\s/g, "")})`}
                 dot={false}
                 isAnimationActive={true}
+                animationDuration={200}
               />
             </AreaChart>
           </ResponsiveContainer>
-        </div>
-      )}
+        )}
+      </div>
     </div>
   );
 }

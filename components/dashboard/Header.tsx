@@ -85,7 +85,7 @@ export function Header({
             style={{
               fontFamily: "var(--font-data)",
               background: range === r.key ? "var(--brand)" : "transparent",
-              color: range === r.key ? "#fff" : "var(--text-secondary)",
+              color: range === r.key ? "var(--active-nav-text)" : "var(--text-secondary)",
             }}
             onMouseEnter={(e) => {
               if (range !== r.key)
@@ -118,16 +118,16 @@ export function Header({
           <span className="relative flex h-2 w-2">
             <span
               className="absolute inline-flex h-full w-full animate-ping rounded-full opacity-75"
-              style={{ background: "#22c55e" }}
+              style={{ background: "var(--live-color)" }}
             />
             <span
               className="relative inline-flex h-2 w-2 rounded-full"
-              style={{ background: "#22c55e" }}
+              style={{ background: "var(--live-color)" }}
             />
           </span>
           <span
             className="text-[12px] font-medium"
-            style={{ color: "#22c55e", fontFamily: "var(--font-data)" }}
+            style={{ color: "var(--live-color)", fontFamily: "var(--font-data)" }}
           >
             Live
           </span>
@@ -154,11 +154,12 @@ export function Header({
         </button>
 
         <div
-          className="flex items-center justify-center rounded-full text-[10px] font-bold text-white"
+          className="flex items-center justify-center rounded-full text-[10px] font-bold"
           style={{
             width: 28,
             height: 28,
             background: "var(--brand)",
+            color: "var(--active-nav-text)",
           }}
         >
           A

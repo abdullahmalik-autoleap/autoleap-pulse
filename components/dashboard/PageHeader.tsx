@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { RotateCw, type LucideIcon } from "lucide-react";
+import { RotateCw, Search, type LucideIcon } from "lucide-react";
 import type { DateRange } from "@/types/dashboard";
 
 const DEFAULT_RANGES: { key: DateRange; label: string; shortcut?: string }[] = [
@@ -39,6 +39,8 @@ function useTimeAgo(date: Date | undefined) {
   return `${Math.floor(seconds / 60)}m ago`;
 }
 
+const isMac = typeof navigator !== "undefined" && /Mac|iPod|iPhone|iPad/.test(navigator.platform);
+
 export function PageHeader({
   title,
   icon: Icon,
@@ -52,6 +54,10 @@ export function PageHeader({
 }: PageHeaderProps) {
   const timeAgo = useTimeAgo(lastUpdated);
 
+  function openCommandCentre() {
+    window.dispatchEvent(new Event("open-command-centre"));
+  }
+
   return (
     <header
       className="flex items-center justify-between px-6 shrink-0 z-10"
@@ -61,7 +67,6 @@ export function PageHeader({
         borderBottom: "1px solid var(--pulse-border)",
       }}
     >
-      {/* Left: Icon + Title + Breadcrumb */}
       <div className="flex items-center gap-2.5">
         <Icon
           style={{
@@ -87,18 +92,11 @@ export function PageHeader({
             {breadcrumbs.map((crumb, i) => (
               <span key={i} className="flex items-center gap-1">
                 {i > 0 && (
-                  <span
-                    style={{
-                      fontSize: 10,
-                      color: "var(--text-muted)",
-                    }}
-                  >
-                    /
-                  </span>
+                  <span style={{ fontSize: 10, color: "var(--text-muted)" }}>/</span>
                 )}
                 <span
                   style={{
-                    fontSize: 11,
+                    fontSize: 12,
                     color: i === breadcrumbs.length - 1 ? "var(--text-secondary)" : "var(--text-muted)",
                     fontFamily: "var(--font-data)",
                   }}
@@ -111,9 +109,7 @@ export function PageHeader({
         </div>
       </div>
 
-      {/* Right: Date range selector + refresh + last updated */}
-      <div className="flex items-center gap-3">
-        {/* Date range selector */}
+      <div className="flex items-center" style={{ gap: 12 }}>
         <div
           className="relative flex items-center gap-1 rounded-lg p-0.5"
           style={{ background: "var(--surface-2)" }}
@@ -122,11 +118,15 @@ export function PageHeader({
             <button
               key={r.key}
               onClick={() => onRangeChange?.(r.key)}
-              className="px-3 py-1 rounded-md text-[12px] font-medium transition-all duration-200"
+              className="font-medium transition-all duration-200"
               style={{
+                height: 30,
+                padding: "0 12px",
+                borderRadius: 6,
+                fontSize: 12,
                 fontFamily: "var(--font-data)",
                 background: range === r.key ? "var(--brand)" : "transparent",
-                color: range === r.key ? "#fff" : "var(--text-secondary)",
+                color: range === r.key ? "var(--active-nav-text)" : "var(--text-secondary)",
               }}
               onMouseEnter={(e) => {
                 if (range !== r.key)
@@ -140,41 +140,65 @@ export function PageHeader({
               {r.label}
             </button>
           ))}
-          {/* Keyboard shortcut hint */}
-          <div
-            className="flex items-center gap-1 ml-1"
-            style={{
-              padding: "2px 6px",
-              borderRadius: 4,
-              background: "var(--surface-3)",
-            }}
-          >
-            <span
-              style={{
-                fontSize: 10,
-                fontFamily: "var(--font-data)",
-                color: "var(--text-muted)",
-              }}
-            >
-              ? for shortcuts
-            </span>
-          </div>
         </div>
 
-        {/* Refresh button */}
         <button
-          onClick={onRefresh}
-          className="p-1.5 rounded-lg transition-all duration-200"
-          style={{ color: "var(--text-muted)" }}
+          onClick={openCommandCentre}
+          className="relative flex items-center justify-center transition-all duration-200"
+          style={{
+            width: 36,
+            height: 36,
+            background: "var(--surface-2)",
+            border: "1px solid var(--pulse-border)",
+            borderRadius: 8,
+            color: "var(--text-muted)",
+          }}
           onMouseEnter={(e) => {
-            e.currentTarget.style.background = "var(--surface-2)";
-            e.currentTarget.style.color = "var(--text-primary)";
+            e.currentTarget.style.background = "var(--surface-3)";
+            e.currentTarget.style.borderColor = "var(--border-hover)";
           }}
           onMouseLeave={(e) => {
-            e.currentTarget.style.background = "transparent";
-            e.currentTarget.style.color = "var(--text-muted)";
+            e.currentTarget.style.background = "var(--surface-2)";
+            e.currentTarget.style.borderColor = "var(--pulse-border)";
           }}
-          title="Refresh data (R)"
+          title="Command Centre"
+        >
+          <Search style={{ width: 15, height: 15 }} />
+          <span
+            style={{
+              position: "absolute",
+              bottom: 2,
+              right: 2,
+              fontSize: 8,
+              fontFamily: "var(--font-data)",
+              color: "var(--text-muted)",
+              lineHeight: 1,
+            }}
+          >
+            {isMac ? "⌘K" : "^K"}
+          </span>
+        </button>
+
+        <button
+          onClick={onRefresh}
+          className="flex items-center justify-center transition-all duration-200"
+          style={{
+            width: 36,
+            height: 36,
+            background: "var(--surface-2)",
+            border: "1px solid var(--pulse-border)",
+            borderRadius: 8,
+            color: "var(--text-muted)",
+          }}
+          onMouseEnter={(e) => {
+            e.currentTarget.style.background = "var(--surface-3)";
+            e.currentTarget.style.borderColor = "var(--border-hover)";
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.style.background = "var(--surface-2)";
+            e.currentTarget.style.borderColor = "var(--pulse-border)";
+          }}
+          title={timeAgo ? `Last updated: ${timeAgo}` : "Refresh data (R)"}
         >
           <RotateCw
             className={isRefreshing ? "refresh-spin" : ""}
@@ -182,34 +206,20 @@ export function PageHeader({
           />
         </button>
 
-        {/* Last updated */}
-        {timeAgo && (
-          <span
-            className="text-[11px]"
-            style={{
-              color: "var(--text-muted)",
-              fontFamily: "var(--font-data)",
-            }}
-          >
-            {timeAgo}
-          </span>
-        )}
-
-        {/* Live indicator */}
         <div className="flex items-center gap-1.5">
           <span className="relative flex h-2 w-2">
             <span
               className="absolute inline-flex h-full w-full animate-ping rounded-full opacity-75"
-              style={{ background: "#22c55e" }}
+              style={{ background: "var(--live-color)" }}
             />
             <span
               className="relative inline-flex h-2 w-2 rounded-full"
-              style={{ background: "#22c55e" }}
+              style={{ background: "var(--live-color)" }}
             />
           </span>
           <span
             className="text-[12px] font-medium"
-            style={{ color: "#22c55e", fontFamily: "var(--font-data)" }}
+            style={{ color: "var(--live-color)", fontFamily: "var(--font-data)" }}
           >
             Live
           </span>

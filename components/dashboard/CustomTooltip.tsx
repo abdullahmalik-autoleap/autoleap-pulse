@@ -25,8 +25,8 @@ export function CustomTooltip({
   return (
     <div
       style={{
-        background: "#1A2B42",
-        border: "1px solid rgba(255,255,255,0.1)",
+        background: "var(--chart-tooltip-bg)",
+        border: "var(--chart-tooltip-border)",
         borderRadius: 8,
         padding: "10px 14px",
         fontFamily: "var(--font-data)",

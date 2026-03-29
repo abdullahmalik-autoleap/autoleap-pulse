@@ -2,10 +2,8 @@
 
 import { useMemo } from "react";
 import {
-  PieChart,
   Pie,
   Cell,
-  LineChart,
   Line,
   XAxis,
   YAxis,
@@ -15,6 +13,7 @@ import {
   ReferenceLine,
   ResponsiveContainer,
 } from "recharts";
+import { LazyPieChart as PieChart, LazyLineChart as LineChart } from "@/components/charts/lazy";
 import { ChartCard } from "@/components/dashboard/ChartCard";
 import { ChartSkeleton } from "@/components/dashboard/ChartSkeleton";
 import { EmptyState } from "@/components/dashboard/EmptyState";
@@ -254,7 +253,7 @@ export function ChurnAnalysis({ churnAnalysis, churnProfile, recentChurn, isLoad
                       <div
                         style={{
                           background: CHART_TOOLTIP_BG,
-                          border: "1px solid rgba(255,255,255,0.1)",
+                          border: "var(--chart-tooltip-border)",
                           borderRadius: 8,
                           padding: "10px 14px",
                           fontFamily: "var(--font-data)",
@@ -272,7 +271,7 @@ export function ChurnAnalysis({ churnAnalysis, churnProfile, recentChurn, isLoad
                 <ReferenceArea
                   y1={0}
                   y2={2}
-                  fill="rgba(14,113,105,0.06)"
+                  fill="var(--chart-brand-area)"
                   strokeOpacity={0}
                 />
                 <ReferenceLine
@@ -289,9 +288,9 @@ export function ChurnAnalysis({ churnAnalysis, churnProfile, recentChurn, isLoad
                 />
                 <Line
                   dataKey="churnRate"
-                  stroke="#EF4444"
+                  stroke="var(--danger)"
                   strokeWidth={2}
-                  dot={{ r: 3, fill: "#EF4444", stroke: "var(--surface-1)", strokeWidth: 2 }}
+                  dot={{ r: 3, fill: "var(--danger)", stroke: "var(--surface-1)", strokeWidth: 2 }}
                   {...CHART_ANIMATION}
                 />
               </LineChart>

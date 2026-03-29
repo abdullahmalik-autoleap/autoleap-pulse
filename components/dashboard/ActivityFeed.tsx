@@ -3,10 +3,10 @@
 import { useLiveFeed } from "@/lib/hooks/useLiveFeed";
 
 const SEVERITY_COLORS: Record<string, string> = {
-  success: "#0E7169",
-  warning: "#F59E0B",
-  danger: "#EF4444",
-  info: "#3B82F6",
+  success: "var(--brand)",
+  warning: "var(--warning)",
+  danger: "var(--danger)",
+  info: "var(--info)",
 };
 
 const TYPE_COLORS: Record<string, { bg: string; text: string }> = {
@@ -54,11 +54,11 @@ export function ActivityFeed() {
           <span className="relative flex h-2 w-2">
             <span
               className="absolute inline-flex h-full w-full animate-ping rounded-full opacity-75"
-              style={{ background: "#22c55e" }}
+              style={{ background: "var(--live-color)" }}
             />
             <span
               className="relative inline-flex h-2 w-2 rounded-full"
-              style={{ background: "#22c55e" }}
+              style={{ background: "var(--live-color)" }}
             />
           </span>
           <span
@@ -66,7 +66,7 @@ export function ActivityFeed() {
               fontSize: 12,
               fontWeight: 500,
               fontFamily: "var(--font-data)",
-              color: "#22c55e",
+              color: "var(--live-color)",
             }}
           >
             Live
@@ -175,7 +175,7 @@ export function ActivityFeed() {
       <div
         className="shrink-0"
         style={{
-          padding: "12px 20px",
+          padding: "8px 20px",
           borderTop: "1px solid var(--pulse-border)",
           textAlign: "center",
         }}

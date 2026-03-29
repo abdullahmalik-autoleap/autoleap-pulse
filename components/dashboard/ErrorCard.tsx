@@ -16,7 +16,7 @@ export function ErrorCard({
       className="flex items-center gap-3 rounded-xl px-4 py-3"
       style={{
         background: "var(--danger-dim)",
-        border: "1px solid rgba(239,68,68,0.3)",
+        border: "1px solid var(--danger-border)",
       }}
     >
       <AlertTriangle
@@ -42,13 +42,13 @@ export function ErrorCard({
           onClick={onRetry}
           className="inline-flex items-center gap-1.5 rounded-md px-3 py-1 text-xs font-medium transition-all duration-200"
           style={{
-            background: "rgba(239,68,68,0.15)",
+            background: "var(--danger-border)",
             color: "var(--danger)",
-            border: "1px solid rgba(239,68,68,0.3)",
+            border: "1px solid var(--danger-border)",
             fontFamily: "var(--font-data)",
           }}
-          onMouseEnter={(e) => (e.currentTarget.style.background = "rgba(239,68,68,0.25)")}
-          onMouseLeave={(e) => (e.currentTarget.style.background = "rgba(239,68,68,0.15)")}
+          onMouseEnter={(e) => (e.currentTarget.style.background = "var(--danger-border)")}
+          onMouseLeave={(e) => (e.currentTarget.style.background = "var(--danger-border)")}
         >
           <RotateCw style={{ width: 12, height: 12 }} />
           Retry

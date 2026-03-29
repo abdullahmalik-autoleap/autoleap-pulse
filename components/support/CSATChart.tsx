@@ -2,11 +2,11 @@
 
 import { useMemo } from "react";
 import {
-  AreaChart,
   Area,
   ReferenceLine,
   ResponsiveContainer,
 } from "recharts";
+import { LazyAreaChart as AreaChart } from "@/components/charts/lazy";
 import { ChartCard } from "@/components/dashboard/ChartCard";
 import { ChartSkeleton } from "@/components/dashboard/ChartSkeleton";
 import { EmptyState } from "@/components/dashboard/EmptyState";
@@ -47,8 +47,8 @@ function StarVisual({ score }: { score: number }) {
       <svg key={i} width={20} height={20} viewBox="0 0 24 24" fill="none">
         <defs>
           <linearGradient id={`starGrad-${i}`}>
-            <stop offset="50%" stopColor={filled || half ? "#0E7169" : "var(--surface-3)"} />
-            <stop offset="50%" stopColor={filled ? "#0E7169" : "var(--surface-3)"} />
+            <stop offset="50%" stopColor={filled || half ? "var(--brand)" : "var(--surface-3)"} />
+            <stop offset="50%" stopColor={filled ? "var(--brand)" : "var(--surface-3)"} />
           </linearGradient>
         </defs>
         <path
@@ -124,8 +124,8 @@ export function CSATChart({ score, trend, distribution, isLoading }: CSATChartPr
             <AreaChart data={trend}>
               <defs>
                 <linearGradient id="csatTrendGrad" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="0%" stopColor="#0E7169" stopOpacity={0.3} />
-                  <stop offset="100%" stopColor="#0E7169" stopOpacity={0} />
+                  <stop offset="0%" stopColor="var(--brand)" stopOpacity={0.3} />
+                  <stop offset="100%" stopColor="var(--brand)" stopOpacity={0} />
                 </linearGradient>
               </defs>
               <ReferenceLine
@@ -136,7 +136,7 @@ export function CSATChart({ score, trend, distribution, isLoading }: CSATChartPr
               <Area
                 type="monotone"
                 dataKey="score"
-                stroke="#0E7169"
+                stroke="var(--brand)"
                 strokeWidth={2}
                 fill="url(#csatTrendGrad)"
                 dot={false}

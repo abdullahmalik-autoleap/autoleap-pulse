@@ -17,14 +17,14 @@ export default function Error({
     <div
       style={{
         minHeight: "100vh",
-        background: "#060D1A",
+        background: "var(--error-page-bg)",
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
         flexDirection: "column",
         gap: "16px",
         fontFamily: "Syne, sans-serif",
-        color: "#E2EAF4",
+        color: "var(--error-page-text)",
       }}
     >
       <div style={{ fontSize: "32px" }}>⚠</div>
@@ -34,7 +34,7 @@ export default function Error({
       <div
         style={{
           fontSize: "13px",
-          color: "#7A8FA8",
+          color: "var(--error-page-sub)",
           maxWidth: "400px",
           textAlign: "center",
         }}
@@ -45,7 +45,7 @@ export default function Error({
         onClick={reset}
         style={{
           marginTop: "8px",
-          background: "#0E7169",
+          background: "var(--brand)",
           color: "white",
           border: "none",
           borderRadius: "8px",

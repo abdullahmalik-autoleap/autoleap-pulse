@@ -26,7 +26,9 @@ export async function GET(request: NextRequest) {
     createdAt: e.createdAt.toISOString(),
   }));
 
-  return NextResponse.json({ events });
+  const res = NextResponse.json({ events });
+  res.headers.set("Cache-Control", "s-maxage=60, stale-while-revalidate=300");
+  return res;
 }
 
 export async function POST(request: NextRequest) {

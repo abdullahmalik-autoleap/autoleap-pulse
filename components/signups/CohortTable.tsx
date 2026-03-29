@@ -96,7 +96,7 @@ export function CohortTable({ data, isLoading }: CohortTableProps) {
                   style={{
                     background:
                       i % 2 === 1
-                        ? "rgba(255,255,255,0.02)"
+                        ? "var(--chart-cursor)"
                         : "transparent",
                     borderLeft: isBest
                       ? "3px solid var(--brand)"

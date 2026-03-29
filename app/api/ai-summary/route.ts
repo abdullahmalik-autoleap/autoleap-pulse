@@ -43,7 +43,12 @@ data-driven, and confident. Tone: executive, not academic. Maximum 180 words tot
           controller.close();
         },
       }),
-      { headers: { "Content-Type": "text/plain; charset=utf-8" } }
+      {
+        headers: {
+          "Content-Type": "text/plain; charset=utf-8",
+          "Cache-Control": "s-maxage=60, stale-while-revalidate=300",
+        },
+      }
     );
   } catch (error) {
     console.error("AI Summary error:", error);

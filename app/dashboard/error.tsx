@@ -24,7 +24,7 @@ export default function DashboardError({
         flexDirection: "column",
         gap: "16px",
         fontFamily: "Syne, sans-serif",
-        color: "#E2EAF4",
+        color: "var(--error-page-text)",
         padding: "48px 24px",
       }}
     >
@@ -35,7 +35,7 @@ export default function DashboardError({
       <div
         style={{
           fontSize: "13px",
-          color: "#7A8FA8",
+          color: "var(--error-page-sub)",
           maxWidth: "400px",
           textAlign: "center",
         }}
@@ -46,7 +46,7 @@ export default function DashboardError({
         <button
           onClick={reset}
           style={{
-            background: "#0E7169",
+            background: "var(--brand)",
             color: "white",
             border: "none",
             borderRadius: "8px",
@@ -61,7 +61,7 @@ export default function DashboardError({
         <Link
           href="/dashboard"
           style={{
-            color: "#0E7169",
+            color: "var(--brand)",
             fontSize: "14px",
             textDecoration: "none",
             fontFamily: "Syne, sans-serif",

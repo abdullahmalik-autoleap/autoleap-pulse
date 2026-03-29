@@ -2,7 +2,6 @@
 
 import { useState, useMemo } from "react";
 import {
-  BarChart,
   Bar,
   XAxis,
   YAxis,
@@ -10,6 +9,7 @@ import {
   Tooltip,
   ResponsiveContainer,
 } from "recharts";
+import { LazyBarChart as BarChart } from "@/components/charts/lazy";
 import { ChartCard } from "@/components/dashboard/ChartCard";
 import { ChartSkeleton } from "@/components/dashboard/ChartSkeleton";
 import { EmptyState } from "@/components/dashboard/EmptyState";
@@ -31,12 +31,12 @@ interface CategoryBreakdownProps {
 }
 
 const CATEGORY_COLORS: Record<string, string> = {
-  Billing: "#0E7169",
-  "Sync Issues": "#3B82F6",
-  "Bug Reports": "#EF4444",
-  "Feature Requests": "#F59E0B",
+  Billing: "var(--brand)",
+  "Sync Issues": "var(--info)",
+  "Bug Reports": "var(--danger)",
+  "Feature Requests": "var(--warning)",
   Onboarding: "#8B5CF6",
-  General: "#6B7280",
+  General: "var(--text-muted)",
 };
 
 function getCategoryColor(category: string): string {
@@ -196,11 +196,11 @@ export function CategoryBreakdown({ data, isLoading }: CategoryBreakdownProps) {
         <div>
           <div className="flex items-center gap-4 mb-2">
             <div className="flex items-center gap-1.5">
-              <span style={{ width: 10, height: 10, borderRadius: 2, background: "#0E7169", display: "inline-block" }} />
+              <span style={{ width: 10, height: 10, borderRadius: 2, background: "var(--brand)", display: "inline-block" }} />
               <span style={{ fontSize: 11, fontFamily: "var(--font-data)", color: "var(--text-secondary)" }}>This Period</span>
             </div>
             <div className="flex items-center gap-1.5">
-              <span style={{ width: 10, height: 10, borderRadius: 2, background: "rgba(14,113,105,0.3)", display: "inline-block" }} />
+              <span style={{ width: 10, height: 10, borderRadius: 2, background: "var(--chart-brand-grad-start)", display: "inline-block" }} />
               <span style={{ fontSize: 11, fontFamily: "var(--font-data)", color: "var(--text-secondary)" }}>Last Period</span>
             </div>
           </div>
@@ -209,7 +209,7 @@ export function CategoryBreakdown({ data, isLoading }: CategoryBreakdownProps) {
               <BarChart data={chartData} barGap={2}>
                 <CartesianGrid
                   strokeDasharray="3 3"
-                  stroke="rgba(255,255,255,0.04)"
+                  stroke="var(--chart-grid)"
                   vertical={false}
                 />
                 <XAxis
@@ -230,8 +230,8 @@ export function CategoryBreakdown({ data, isLoading }: CategoryBreakdownProps) {
                     return (
                       <div
                         style={{
-                          background: "#1A2B42",
-                          border: "1px solid rgba(255,255,255,0.1)",
+                          background: "var(--chart-tooltip-bg)",
+                          border: "var(--chart-tooltip-border)",
                           borderRadius: 8,
                           padding: "10px 14px",
                           fontFamily: "var(--font-data)",
@@ -251,23 +251,21 @@ export function CategoryBreakdown({ data, isLoading }: CategoryBreakdownProps) {
                       </div>
                     );
                   }}
-                  cursor={{ fill: "rgba(255,255,255,0.02)" }}
+                  cursor={{ fill: "var(--chart-cursor)" }}
                 />
                 <Bar
                   dataKey="current"
                   name="This Period"
-                  fill="#0E7169"
+                  fill="var(--brand)"
                   radius={[3, 3, 0, 0]}
-                  isAnimationActive={true}
-                  animationDuration={1000}
+                  {...CHART_ANIMATION}
                 />
                 <Bar
                   dataKey="previous"
                   name="Last Period"
-                  fill="rgba(14,113,105,0.3)"
+                  fill="var(--chart-brand-grad-start)"
                   radius={[3, 3, 0, 0]}
-                  isAnimationActive={true}
-                  animationDuration={1000}
+                  {...CHART_ANIMATION}
                 />
               </BarChart>
             </ResponsiveContainer>

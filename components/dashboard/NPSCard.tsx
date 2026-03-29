@@ -16,9 +16,9 @@ interface NPSCardProps {
 }
 
 const BARS = [
-  { key: "promoters", label: "Promoters", color: "#0E7169" },
-  { key: "passives", label: "Passives", color: "#3B82F6" },
-  { key: "detractors", label: "Detractors", color: "#EF4444" },
+  { key: "promoters", label: "Promoters", color: "var(--brand)" },
+  { key: "passives", label: "Passives", color: "var(--info)" },
+  { key: "detractors", label: "Detractors", color: "var(--danger)" },
 ] as const;
 
 function getSentiment(score: number) {
@@ -97,7 +97,7 @@ export function NPSCard({
               fontSize: 64,
               fontWeight: 800,
               fontFamily: "var(--font-data)",
-              color: "#0E7169",
+              color: "var(--brand)",
               lineHeight: 1,
               letterSpacing: -2,
             }}
@@ -219,21 +219,21 @@ export function NPSCard({
           <div
             style={{
               width: mounted && total > 0 ? `${(detractors / total) * 100}%` : "0%",
-              background: "#EF4444",
+              background: "var(--danger)",
               transition: "width 1.2s cubic-bezier(0.34, 1.56, 0.64, 1)",
             }}
           />
           <div
             style={{
               width: mounted && total > 0 ? `${(passives / total) * 100}%` : "0%",
-              background: "#3B82F6",
+              background: "var(--info)",
               transition: "width 1.2s cubic-bezier(0.34, 1.56, 0.64, 1)",
             }}
           />
           <div
             style={{
               width: mounted && total > 0 ? `${(promoters / total) * 100}%` : "0%",
-              background: "#0E7169",
+              background: "var(--brand)",
               transition: "width 1.2s cubic-bezier(0.34, 1.56, 0.64, 1)",
             }}
           />

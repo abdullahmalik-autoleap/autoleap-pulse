@@ -15,12 +15,12 @@ import { PageHeader } from "@/components/dashboard/PageHeader";
 import { KPICard } from "@/components/dashboard/KPICard";
 import { KPIGrid } from "@/components/dashboard/KPIGrid";
 import { ErrorCard } from "@/components/dashboard/ErrorCard";
-import { KeyboardShortcutsModal } from "@/components/dashboard/KeyboardShortcutsModal";
 import { MRRTrendChart } from "./MRRTrendChart";
 import { MRRWaterfallChart } from "./MRRWaterfallChart";
 import { RevenuePlanBreakdown } from "./RevenuePlanBreakdown";
 import { ChurnAnalysis } from "./ChurnAnalysis";
 import { RevenueMetricsTable } from "./RevenueMetricsTable";
+import { LazySection } from "@/components/lazy-section";
 
 interface RevenueSummary {
   mrr: number;
@@ -134,24 +134,6 @@ const REVENUE_RANGES: { key: DateRange; label: string; shortcut?: string }[] = [
   { key: "12m", label: "12M", shortcut: "1" },
 ];
 
-const SHORTCUT_GROUPS = [
-  {
-    title: "General",
-    shortcuts: [
-      { key: "R", description: "Refresh data" },
-      { key: "?", description: "Show keyboard shortcuts" },
-    ],
-  },
-  {
-    title: "Date Range",
-    shortcuts: [
-      { key: "3", description: "3 months" },
-      { key: "6", description: "6 months" },
-      { key: "1", description: "12 months" },
-    ],
-  },
-];
-
 export function RevenueClient() {
   const [dateRange, setDateRange] = useState<DateRange>("12m");
   const [data, setData] = useState<RevenueData | null>(null);
@@ -159,8 +141,6 @@ export function RevenueClient() {
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [lastUpdated, setLastUpdated] = useState<Date | undefined>();
   const [error, setError] = useState<string | null>(null);
-  const [showShortcuts, setShowShortcuts] = useState(false);
-
   const fetchData = useCallback(
     async (range: DateRange, isRangeChange = false) => {
       if (isRangeChange) setIsLoading(true);
@@ -222,10 +202,6 @@ export function RevenueClient() {
           handleRangeChange("12m");
           fetchData("12m", true);
           break;
-        case "?":
-          e.preventDefault();
-          setShowShortcuts((v) => !v);
-          break;
       }
     }
     window.addEventListener("keydown", handleKeyDown);
@@ -257,9 +233,9 @@ export function RevenueClient() {
         style={{
           padding: 24,
           backgroundImage: [
-            "linear-gradient(rgba(255,255,255,0.015) 1px, transparent 1px)",
-            "linear-gradient(90deg, rgba(255,255,255,0.015) 1px, transparent 1px)",
-            "radial-gradient(ellipse 60% 40% at 50% 0%, rgba(14,113,105,0.06) 0%, transparent 70%)",
+            "linear-gradient(var(--page-grid-line) 1px, transparent 1px)",
+            "linear-gradient(90deg, var(--page-grid-line) 1px, transparent 1px)",
+            "radial-gradient(ellipse 60% 40% at 50% 0%, var(--page-grid-glow) 0%, transparent 70%)",
           ].join(", "),
           backgroundSize: "40px 40px, 40px 40px, 100% 100%",
         }}
@@ -342,62 +318,57 @@ export function RevenueClient() {
             </KPIGrid>
           </div>
 
-          <div className="row-fade-in" style={{ animationDelay: "200ms" }}>
+          <LazySection height={360}>
             <MRRTrendChart
               data={data?.mrrTrend ?? []}
               currentMRR={s?.mrr ?? 0}
               mrrDelta={s?.mrrDelta ?? 0}
               isLoading={isLoading}
             />
-          </div>
+          </LazySection>
 
-          <div
-            className="grid row-fade-in"
-            style={{
-              gridTemplateColumns: "55fr 45fr",
-              gap: 16,
-              animationDelay: "300ms",
-            }}
-          >
-            <MRRWaterfallChart
-              data={data?.mrrWaterfall ?? []}
-              currentMonth={
-                data?.mrrTrend?.length
-                  ? data.mrrTrend[data.mrrTrend.length - 1].month
-                  : ""
-              }
-              isLoading={isLoading}
-            />
-            <RevenuePlanBreakdown
-              plans={data?.byPlan ?? []}
-              planMixTrend={data?.planMixTrend ?? []}
-              isLoading={isLoading}
-            />
-          </div>
+          <LazySection height={340}>
+            <div
+              className="grid"
+              style={{
+                gridTemplateColumns: "55fr 45fr",
+                gap: 16,
+              }}
+            >
+              <MRRWaterfallChart
+                data={data?.mrrWaterfall ?? []}
+                currentMonth={
+                  data?.mrrTrend?.length
+                    ? data.mrrTrend[data.mrrTrend.length - 1].month
+                    : ""
+                }
+                isLoading={isLoading}
+              />
+              <RevenuePlanBreakdown
+                plans={data?.byPlan ?? []}
+                planMixTrend={data?.planMixTrend ?? []}
+                isLoading={isLoading}
+              />
+            </div>
+          </LazySection>
 
-          <div className="row-fade-in" style={{ animationDelay: "400ms" }}>
+          <LazySection height={400}>
             <ChurnAnalysis
               churnAnalysis={data?.churnAnalysis ?? null}
               churnProfile={data?.churnProfile ?? null}
               recentChurn={data?.recentChurn ?? []}
               isLoading={isLoading}
             />
-          </div>
+          </LazySection>
 
-          <div className="row-fade-in" style={{ animationDelay: "500ms" }}>
+          <LazySection height={300}>
             <RevenueMetricsTable
               data={data?.monthlyTable ?? []}
               isLoading={isLoading}
             />
-          </div>
+          </LazySection>
         </div>
       </main>
-
-      <KeyboardShortcutsModal
-        isOpen={showShortcuts}
-        onClose={() => setShowShortcuts(false)}
-        groups={SHORTCUT_GROUPS}
-      />
     </>
   );
 }

@@ -279,7 +279,7 @@ export async function GET(request: NextRequest) {
     firstResponseAt: t.firstResponseAt?.toISOString() ?? null,
   }));
 
-  return NextResponse.json({
+  const res = NextResponse.json({
     summary,
     ticketTrend,
     byCategory,
@@ -291,6 +291,8 @@ export async function GET(request: NextRequest) {
     slaPerformance,
     openTickets: openTicketsData,
   });
+  res.headers.set("Cache-Control", "s-maxage=60, stale-while-revalidate=300");
+  return res;
 }
 
 function groupCount<T>(

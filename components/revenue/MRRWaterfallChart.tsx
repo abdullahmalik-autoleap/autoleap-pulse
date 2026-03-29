@@ -2,7 +2,6 @@
 
 import { useMemo } from "react";
 import {
-  BarChart,
   Bar,
   XAxis,
   YAxis,
@@ -11,6 +10,7 @@ import {
   Cell,
   ResponsiveContainer,
 } from "recharts";
+import { LazyBarChart as BarChart } from "@/components/charts/lazy";
 import { ChartCard } from "@/components/dashboard/ChartCard";
 import { ChartSkeleton } from "@/components/dashboard/ChartSkeleton";
 import { EmptyState } from "@/components/dashboard/EmptyState";
@@ -39,10 +39,10 @@ interface WaterfallDataPoint {
 }
 
 const FILL_MAP: Record<string, string> = {
-  base: "#0E7169",
-  total: "#0E7169",
-  positive: "rgba(14,113,105,0.75)",
-  negative: "#EF4444",
+  base: "var(--brand)",
+  total: "var(--brand)",
+  positive: "var(--chart-brand-grad-bar-start)",
+  negative: "var(--danger)",
 };
 
 function buildWaterfallData(items: WaterfallItem[]): WaterfallDataPoint[] {
@@ -194,7 +194,7 @@ export function MRRWaterfallChart({ data, currentMonth, isLoading }: MRRWaterfal
                   <div
                     style={{
                       background: CHART_TOOLTIP_BG,
-                      border: "1px solid rgba(255,255,255,0.1)",
+                      border: "var(--chart-tooltip-border)",
                       borderRadius: 8,
                       padding: "10px 14px",
                       fontFamily: "var(--font-data)",

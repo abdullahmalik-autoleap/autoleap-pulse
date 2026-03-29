@@ -5,14 +5,14 @@ export default function NotFound() {
     <div
       style={{
         minHeight: "100vh",
-        background: "#060D1A",
+        background: "var(--error-page-bg)",
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
         flexDirection: "column",
         gap: "16px",
         fontFamily: "Syne, sans-serif",
-        color: "#E2EAF4",
+        color: "var(--error-page-text)",
       }}
     >
       <div style={{ fontSize: "64px", fontWeight: 700 }}>404</div>
@@ -20,7 +20,7 @@ export default function NotFound() {
       <div
         style={{
           fontSize: "13px",
-          color: "#7A8FA8",
+          color: "var(--error-page-sub)",
           maxWidth: "400px",
           textAlign: "center",
         }}
@@ -31,7 +31,7 @@ export default function NotFound() {
         href="/dashboard"
         style={{
           marginTop: "8px",
-          color: "#0E7169",
+            color: "var(--brand)",
           fontSize: "14px",
           textDecoration: "none",
           fontFamily: "Syne, sans-serif",

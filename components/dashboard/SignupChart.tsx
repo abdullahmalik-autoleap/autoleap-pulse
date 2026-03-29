@@ -1,7 +1,6 @@
 "use client";
 
 import {
-  AreaChart,
   Area,
   XAxis,
   YAxis,
@@ -10,6 +9,7 @@ import {
   ResponsiveContainer,
   ReferenceDot,
 } from "recharts";
+import { LazyAreaChart as AreaChart } from "@/components/charts/lazy";
 import { ChartCard } from "./ChartCard";
 import { CustomTooltip } from "./CustomTooltip";
 import { EmptyState } from "./EmptyState";
@@ -68,8 +68,8 @@ export function SignupChart({ data, isLoading }: SignupChartProps) {
           <AreaChart data={data}>
             <defs>
               <linearGradient id="signupGradient" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="0%" stopColor="rgba(14,113,105,0.3)" />
-                <stop offset="100%" stopColor="rgba(14,113,105,0)" />
+                <stop offset="0%" stopColor="var(--chart-brand-grad-start)" />
+                <stop offset="100%" stopColor="var(--chart-brand-grad-end)" />
               </linearGradient>
             </defs>
             <CartesianGrid {...CHART_GRID} />
@@ -84,20 +84,20 @@ export function SignupChart({ data, isLoading }: SignupChartProps) {
               width={35}
             />
             <Tooltip
-              content={<CustomTooltip colorMap={{ signups: "#0E7169" }} />}
-              cursor={{ stroke: "rgba(255,255,255,0.06)" }}
+              content={<CustomTooltip colorMap={{ signups: "var(--brand)" }} />}
+              cursor={{ stroke: "var(--chart-cursor-stroke)" }}
             />
             <Area
               type="monotone"
               dataKey="signups"
               name="Signups"
-              stroke="#0E7169"
+              stroke="var(--brand)"
               strokeWidth={2}
               fill="url(#signupGradient)"
               activeDot={{
                 r: 5,
-                fill: "#0E7169",
-                stroke: "#060D1A",
+                fill: "var(--brand)",
+                stroke: "var(--chart-dot-stroke)",
                 strokeWidth: 2,
               }}
               {...CHART_ANIMATION}
@@ -106,8 +106,8 @@ export function SignupChart({ data, isLoading }: SignupChartProps) {
               x={peak.date}
               y={peak.value}
               r={3}
-              fill="#0E7169"
-              stroke="#060D1A"
+              fill="var(--brand)"
+              stroke="var(--chart-dot-stroke)"
               strokeWidth={2}
               label={{
                 value: `${peak.value}`,

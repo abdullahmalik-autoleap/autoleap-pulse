@@ -2,6 +2,8 @@
 
 import { useState, useEffect, useRef, useCallback } from "react";
 import { Toggle } from "@/components/dashboard/Toggle";
+import { useTheme } from "@/lib/theme";
+import { Check } from "lucide-react";
 
 const DATA_SOURCES = [
   {
@@ -88,6 +90,7 @@ export default function SettingsPage() {
   const [connections, setConnections] = useState(buildInitialConnections);
   const [aiSettings, setAISettings] = useState<AISettings>(INITIAL_AI);
   const [notifications, setNotifications] = useState(buildInitialNotifications);
+  const { theme, toggleTheme } = useTheme();
 
   const [savedSnapshot, setSavedSnapshot] = useState(() =>
     JSON.stringify({ aiSettings: INITIAL_AI, notifications: buildInitialNotifications() })
@@ -191,6 +194,102 @@ export default function SettingsPage() {
       {/* Main content */}
       <main className="flex-1 p-6">
         <div className="mx-auto flex flex-col gap-8" style={{ maxWidth: 860 }}>
+
+          {/* SECTION: Appearance */}
+          <section>
+            <h2
+              style={{
+                fontFamily: "var(--font-display)",
+                fontSize: 16,
+                fontWeight: 700,
+                color: "var(--text-primary)",
+                marginBottom: 4,
+              }}
+            >
+              Appearance
+            </h2>
+            <p
+              style={{
+                fontSize: 13,
+                color: "var(--text-secondary)",
+                marginBottom: 16,
+              }}
+            >
+              Choose your preferred theme
+            </p>
+
+            <div className="flex gap-4">
+              {(["dark", "light"] as const).map((t) => {
+                const isActive = theme === t;
+                return (
+                  <button
+                    key={t}
+                    onClick={() => { if (!isActive) toggleTheme(); }}
+                    style={{
+                      width: "50%",
+                      borderRadius: 14,
+                      padding: 16,
+                      border: `2px solid ${isActive ? "var(--brand)" : "var(--pulse-border)"}`,
+                      background: "var(--surface-1)",
+                      cursor: "pointer",
+                      position: "relative",
+                      textAlign: "left",
+                    }}
+                  >
+                    {isActive && (
+                      <div
+                        style={{
+                          position: "absolute",
+                          top: 8,
+                          right: 8,
+                          width: 20,
+                          height: 20,
+                          borderRadius: "50%",
+                          background: "var(--brand)",
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "center",
+                        }}
+                      >
+                        <Check size={12} color="#fff" strokeWidth={3} />
+                      </div>
+                    )}
+
+                    <div
+                      style={{
+                        width: 120,
+                        height: 72,
+                        borderRadius: 8,
+                        background: t === "dark" ? "#0B1425" : "#F8FAFC",
+                        padding: 8,
+                        display: "flex",
+                        flexDirection: "column",
+                        gap: 6,
+                        marginBottom: 10,
+                      }}
+                    >
+                      <div style={{ height: 8, borderRadius: 4, background: t === "dark" ? "#162035" : "#E2E8F0" }} />
+                      <div style={{ height: 8, borderRadius: 4, background: "#0E7169" }} />
+                      <div style={{ height: 8, borderRadius: 4, background: t === "dark" ? "#101C30" : "#F1F5F9" }} />
+                    </div>
+
+                    <span
+                      style={{
+                        fontSize: 14,
+                        fontWeight: 600,
+                        color: "var(--text-primary)",
+                      }}
+                    >
+                      {t === "dark" ? "Dark" : "Light"}
+                    </span>
+                  </button>
+                );
+              })}
+            </div>
+          </section>
+
+          {/* Divider */}
+          <div style={{ height: 1, background: "var(--pulse-border)" }} />
 
           {/* SECTION 1: Data Connections */}
           <section>

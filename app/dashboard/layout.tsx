@@ -1,8 +1,11 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
 import { Sidebar } from "@/components/dashboard/Sidebar";
 import { PageTransition } from "@/components/dashboard/PageTransition";
+import { LoadingBar } from "@/components/loading-bar";
+import { CommandCentre } from "@/components/command-centre";
 
 const STORAGE_KEY = "sidebar-collapsed";
 
@@ -13,6 +16,11 @@ export default function DashboardLayout({
 }) {
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [mounted, setMounted] = useState(false);
+  const router = useRouter();
+
+  useEffect(() => {
+    ["/dashboard/signups", "/dashboard/revenue", "/dashboard/support", "/dashboard/settings", "/dashboard/overview"].forEach((r) => router.prefetch(r));
+  }, [router]);
 
   useEffect(() => {
     setIsCollapsed(localStorage.getItem(STORAGE_KEY) === "true");
@@ -44,7 +52,9 @@ export default function DashboardLayout({
   return (
     <div className="flex h-screen overflow-hidden" style={{ background: "var(--bg)" }}>
       <Sidebar collapsed={isCollapsed} onToggle={handleToggle} />
+      <LoadingBar />
       <PageTransition>{children}</PageTransition>
+      <CommandCentre />
     </div>
   );
 }

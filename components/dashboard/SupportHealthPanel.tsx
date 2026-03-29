@@ -1,6 +1,7 @@
 "use client";
 
-import { PieChart, Pie, Cell, Tooltip, ResponsiveContainer } from "recharts";
+import { Pie, Cell, Tooltip, ResponsiveContainer } from "recharts";
+import { LazyPieChart as PieChart } from "@/components/charts/lazy";
 import { EmptyState } from "./EmptyState";
 import { ShieldCheck } from "lucide-react";
 
@@ -30,8 +31,8 @@ function DonutTooltip({
   return (
     <div
       style={{
-        background: "#1A2B42",
-        border: "1px solid rgba(255,255,255,0.1)",
+        background: "var(--chart-tooltip-bg)",
+        border: "var(--chart-tooltip-border)",
         borderRadius: 8,
         padding: "8px 12px",
         fontFamily: "var(--font-data)",
@@ -147,7 +148,7 @@ export function SupportHealthPanel({ data }: SupportHealthPanelProps) {
                 cornerRadius={3}
                 dataKey="value"
                 isAnimationActive={true}
-                animationDuration={1200}
+                animationDuration={400}
               >
                 {data.map((entry) => (
                   <Cell key={entry.name} fill={entry.color} stroke="none" />

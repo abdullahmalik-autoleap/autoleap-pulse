@@ -2,7 +2,6 @@
 
 import { useMemo } from "react";
 import {
-  ComposedChart,
   Bar,
   Line,
   XAxis,
@@ -12,6 +11,7 @@ import {
   ReferenceArea,
   ResponsiveContainer,
 } from "recharts";
+import { LazyComposedChart as ComposedChart } from "@/components/charts/lazy";
 import { ChartCard } from "@/components/dashboard/ChartCard";
 import { CustomTooltip } from "@/components/dashboard/CustomTooltip";
 import { ChartSkeleton } from "@/components/dashboard/ChartSkeleton";
@@ -92,7 +92,7 @@ export function MRRTrendChart({ data, currentMRR, mrrDelta, isLoading }: MRRTren
                   width: 10,
                   height: 10,
                   borderRadius: 2,
-                  background: "#0E7169",
+                  background: "var(--brand)",
                   opacity: 0.7,
                   display: "inline-block",
                 }}
@@ -112,10 +112,10 @@ export function MRRTrendChart({ data, currentMRR, mrrDelta, isLoading }: MRRTren
                 style={{
                   width: 14,
                   height: 2,
-                  background: "rgba(255,255,255,0.6)",
+                  background: "var(--chart-muted-line)",
                   display: "inline-block",
                   borderRadius: 1,
-                  borderTop: "1px dashed rgba(255,255,255,0.6)",
+                  borderTop: "1px dashed var(--chart-muted-line)",
                 }}
               />
               <span
@@ -163,8 +163,8 @@ export function MRRTrendChart({ data, currentMRR, mrrDelta, isLoading }: MRRTren
           <ComposedChart data={chartData}>
             <defs>
               <linearGradient id="mrrBarGradient" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="0%" stopColor="rgba(14,113,105,0.9)" />
-                <stop offset="100%" stopColor="rgba(14,113,105,0.3)" />
+                <stop offset="0%" stopColor="var(--chart-brand-grad-bar-start)" />
+                <stop offset="100%" stopColor="var(--chart-brand-grad-bar-end)" />
               </linearGradient>
             </defs>
             <CartesianGrid {...CHART_GRID} />
@@ -192,17 +192,17 @@ export function MRRTrendChart({ data, currentMRR, mrrDelta, isLoading }: MRRTren
             <Tooltip
               content={
                 <CustomTooltip
-                  colorMap={{ mrr: "#0E7169", arrLine: "rgba(255,255,255,0.6)" }}
+                  colorMap={{ mrr: "var(--brand)", arrLine: "var(--chart-muted-line)" }}
                 />
               }
-              cursor={{ fill: "rgba(255,255,255,0.02)" }}
+              cursor={{ fill: "var(--chart-cursor)" }}
             />
             {firstYoY && lastYoY && (
               <ReferenceArea
                 yAxisId="left"
                 x1={firstYoY}
                 x2={lastYoY}
-                fill="rgba(14,113,105,0.06)"
+                fill="var(--chart-brand-area)"
                 strokeOpacity={0}
               />
             )}
@@ -229,7 +229,7 @@ export function MRRTrendChart({ data, currentMRR, mrrDelta, isLoading }: MRRTren
                       x={nx + nw / 2}
                       y={ny - 6}
                       textAnchor="middle"
-                      fill="#0E7169"
+                      fill="var(--brand)"
                       fontSize={9}
                       fontFamily="var(--font-data)"
                       fontWeight={600}
@@ -245,7 +245,7 @@ export function MRRTrendChart({ data, currentMRR, mrrDelta, isLoading }: MRRTren
                       x={nx + nw / 2}
                       y={ny - 6}
                       textAnchor="middle"
-                      fill="#F59E0B"
+                      fill="var(--warning)"
                       fontSize={10}
                       fontFamily="var(--font-data)"
                       fontWeight={700}
@@ -262,7 +262,7 @@ export function MRRTrendChart({ data, currentMRR, mrrDelta, isLoading }: MRRTren
               yAxisId="right"
               dataKey="arrLine"
               name="ARR/12"
-              stroke="rgba(255,255,255,0.6)"
+              stroke="var(--chart-muted-line)"
               strokeWidth={1.5}
               strokeDasharray="6 3"
               dot={false}

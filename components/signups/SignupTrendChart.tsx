@@ -2,7 +2,6 @@
 
 import { useMemo } from "react";
 import {
-  ComposedChart,
   Bar,
   Line,
   XAxis,
@@ -13,6 +12,7 @@ import {
   Brush,
   ResponsiveContainer,
 } from "recharts";
+import { LazyComposedChart as ComposedChart } from "@/components/charts/lazy";
 import { ChartCard } from "@/components/dashboard/ChartCard";
 import { CustomTooltip } from "@/components/dashboard/CustomTooltip";
 import { ChartSkeleton } from "@/components/dashboard/ChartSkeleton";
@@ -101,7 +101,7 @@ export function SignupTrendChart({ data, total, isLoading }: SignupTrendChartPro
                   width: 10,
                   height: 10,
                   borderRadius: 2,
-                  background: "#0E7169",
+                  background: "var(--brand)",
                   opacity: 0.7,
                   display: "inline-block",
                 }}
@@ -174,8 +174,8 @@ export function SignupTrendChart({ data, total, isLoading }: SignupTrendChartPro
           <ComposedChart data={chartData}>
             <defs>
               <linearGradient id="barGradientSignups" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="0%" stopColor="#0E7169" stopOpacity={0.7} />
-                <stop offset="100%" stopColor="#0E7169" stopOpacity={0.4} />
+                <stop offset="0%" stopColor="var(--brand)" stopOpacity={0.7} />
+                <stop offset="100%" stopColor="var(--brand)" stopOpacity={0.4} />
               </linearGradient>
             </defs>
             <CartesianGrid {...CHART_GRID} />
@@ -196,10 +196,10 @@ export function SignupTrendChart({ data, total, isLoading }: SignupTrendChartPro
             <Tooltip
               content={
                 <CustomTooltip
-                  colorMap={{ count: "#0E7169", avg7d: "#94a3b8" }}
+                  colorMap={{ count: "var(--brand)", avg7d: "var(--text-muted)" }}
                 />
               }
-              cursor={{ fill: "rgba(255,255,255,0.02)" }}
+              cursor={{ fill: "var(--chart-cursor)" }}
             />
             <ReferenceLine
               y={avg}
@@ -233,7 +233,7 @@ export function SignupTrendChart({ data, total, isLoading }: SignupTrendChartPro
                       height={22}
                       rx={6}
                       fill="var(--surface-2)"
-                      stroke="#0E7169"
+                      stroke="var(--brand)"
                       strokeWidth={1}
                     />
                     <text

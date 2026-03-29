@@ -42,7 +42,7 @@ export function Toaster() {
             display: "flex",
             alignItems: "center",
             gap: 10,
-            boxShadow: "0 4px 24px rgba(0,0,0,0.4)",
+            boxShadow: "var(--shadow-md)",
           }}
         >
           <p

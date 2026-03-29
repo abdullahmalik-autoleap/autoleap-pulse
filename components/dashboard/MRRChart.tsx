@@ -1,7 +1,6 @@
 "use client";
 
 import {
-  LineChart,
   Line,
   XAxis,
   YAxis,
@@ -9,6 +8,7 @@ import {
   Tooltip,
   ResponsiveContainer,
 } from "recharts";
+import { LazyLineChart as LineChart } from "@/components/charts/lazy";
 import { ChartCard } from "./ChartCard";
 import { CustomTooltip } from "./CustomTooltip";
 import { EmptyState } from "./EmptyState";
@@ -87,22 +87,22 @@ export function MRRChart({ data, isLoading }: MRRChartProps) {
             <Tooltip
               content={
                 <CustomTooltip
-                  colorMap={{ mrr: "#0E7169", target: "#3D5166" }}
+                  colorMap={{ mrr: "var(--brand)", target: "var(--chart-axis-tick)" }}
                 />
               }
-              cursor={{ stroke: "rgba(255,255,255,0.06)" }}
+              cursor={{ stroke: "var(--chart-cursor-stroke)" }}
             />
             <Line
               type="monotone"
               dataKey="mrr"
               name="MRR"
-              stroke="#0E7169"
+              stroke="var(--brand)"
               strokeWidth={2}
               dot={false}
               activeDot={{
                 r: 5,
-                fill: "#0E7169",
-                stroke: "#060D1A",
+                fill: "var(--brand)",
+                stroke: "var(--chart-dot-stroke)",
                 strokeWidth: 2,
               }}
               {...CHART_ANIMATION}

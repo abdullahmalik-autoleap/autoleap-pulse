@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useCallback, useRef } from "react";
+import { useState, useEffect, useCallback, useMemo } from "react";
 import {
   UserPlus,
   Store,
@@ -25,42 +25,21 @@ import { AIBriefing } from "./AIBriefing";
 import { ActivityFeed } from "./ActivityFeed";
 import { FeatureRequestsPanel } from "./FeatureRequestsPanel";
 import { SupportHealthPanel } from "./SupportHealthPanel";
-import { DataFreshnessBar } from "./DataFreshnessBar";
 import { ErrorCard } from "./ErrorCard";
 import { Toaster } from "./Toaster";
-import { KeyboardShortcutsModal } from "./KeyboardShortcutsModal";
-
-const POLL_INTERVAL = 30_000;
+import { LazySection } from "@/components/lazy-section";
 const SUPPORT_COLORS: Record<string, string> = {
-  Billing: "#EF4444",
-  Sync: "#F59E0B",
-  Bug: "#3B82F6",
-  Feature: "#0E7169",
-  General: "#6B7280",
+  Billing: "var(--danger)",
+  Sync: "var(--warning)",
+  Bug: "var(--info)",
+  Feature: "var(--brand)",
+  General: "var(--text-muted)",
 };
 
 const OVERVIEW_RANGES: { key: DateRange; label: string; shortcut?: string }[] = [
   { key: "7d", label: "7D", shortcut: "7" },
   { key: "30d", label: "30D", shortcut: "3" },
   { key: "90d", label: "90D", shortcut: "9" },
-];
-
-const SHORTCUT_GROUPS = [
-  {
-    title: "General",
-    shortcuts: [
-      { key: "R", description: "Refresh data" },
-      { key: "?", description: "Show keyboard shortcuts" },
-    ],
-  },
-  {
-    title: "Date Range",
-    shortcuts: [
-      { key: "7", description: "Switch to 7 days" },
-      { key: "3", description: "Switch to 30 days" },
-      { key: "9", description: "Switch to 90 days" },
-    ],
-  },
 ];
 
 interface DashboardClientProps {
@@ -74,9 +53,6 @@ export function DashboardClient({ initialData }: DashboardClientProps) {
   const [data, setData] = useState<DashboardData>(initialData);
   const [chartLoading, setChartLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [freshnessProgress, setFreshnessProgress] = useState(0);
-  const [showShortcuts, setShowShortcuts] = useState(false);
-  const freshnessRef = useRef<ReturnType<typeof setInterval>>(null);
   const toastState = useToastState();
 
   const fetchData = useCallback(
@@ -94,7 +70,6 @@ export function DashboardClient({ initialData }: DashboardClientProps) {
         const json: DashboardData = await res.json();
         setData(json);
         setLastUpdated(new Date());
-        setFreshnessProgress(0);
 
         if (!isRangeChange) {
           toastState.toast("↻ Data refreshed", "info");
@@ -124,25 +99,6 @@ export function DashboardClient({ initialData }: DashboardClientProps) {
   }, [fetchData, dateRange]);
 
   useEffect(() => {
-    const id = setInterval(() => fetchData(dateRange), POLL_INTERVAL);
-    return () => clearInterval(id);
-  }, [fetchData, dateRange]);
-
-  useEffect(() => {
-    if (freshnessRef.current) clearInterval(freshnessRef.current);
-    setFreshnessProgress(0);
-    freshnessRef.current = setInterval(() => {
-      setFreshnessProgress((p) => {
-        if (p >= 100) return 100;
-        return p + 100 / (POLL_INTERVAL / 1000);
-      });
-    }, 1000);
-    return () => {
-      if (freshnessRef.current) clearInterval(freshnessRef.current);
-    };
-  }, [lastUpdated]);
-
-  useEffect(() => {
     function handleKeyDown(e: KeyboardEvent) {
       const tag = (e.target as HTMLElement).tagName;
       if (tag === "INPUT" || tag === "TEXTAREA" || tag === "SELECT") return;
@@ -165,10 +121,6 @@ export function DashboardClient({ initialData }: DashboardClientProps) {
           e.preventDefault();
           handleRangeChange("90d");
           break;
-        case "?":
-          e.preventDefault();
-          setShowShortcuts((v) => !v);
-          break;
       }
     }
     window.addEventListener("keydown", handleKeyDown);
@@ -182,19 +134,22 @@ export function DashboardClient({ initialData }: DashboardClientProps) {
       : "Pulse · Overview · AutoLeap";
   }, [data.today.newSignups]);
 
-  const signupData = data.trend.map((t) => ({ date: t.date, signups: t.signups }));
-  const mrrData = data.trend.map((t) => ({ date: t.date, mrr: t.mrr }));
-  const ticketData = data.trend.map((t) => ({
+  const signupData = useMemo(() => data.trend.map((t) => ({ date: t.date, signups: t.signups })), [data.trend]);
+  const mrrData = useMemo(() => data.trend.map((t) => ({ date: t.date, mrr: t.mrr })), [data.trend]);
+  const ticketData = useMemo(() => data.trend.map((t) => ({
     date: t.date,
     opened: t.tickets,
     resolved: t.resolved,
-  }));
+  })), [data.trend]);
 
-  const supportData = data.topSupportCategories.map((c) => ({
+  const supportData = useMemo(() => data.topSupportCategories.map((c) => ({
     name: c.category,
     value: c.count,
-    color: SUPPORT_COLORS[c.category] ?? "#6B7280",
-  }));
+    color: SUPPORT_COLORS[c.category] ?? "var(--text-muted)",
+  })), [data.topSupportCategories]);
+
+  const signupSparkline = useMemo(() => signupData.map((s) => s.signups), [signupData]);
+  const mrrSparkline = useMemo(() => mrrData.map((m) => m.mrr), [mrrData]);
 
   const metricsSnapshot: Record<string, unknown> = {
     newSignups: data.today.newSignups,
@@ -226,15 +181,13 @@ export function DashboardClient({ initialData }: DashboardClientProps) {
         style={{
           padding: 24,
           backgroundImage: [
-            "linear-gradient(rgba(255,255,255,0.015) 1px, transparent 1px)",
-            "linear-gradient(90deg, rgba(255,255,255,0.015) 1px, transparent 1px)",
-            "radial-gradient(ellipse 60% 40% at 50% 0%, rgba(14,113,105,0.06) 0%, transparent 70%)",
+            "linear-gradient(var(--page-grid-line) 1px, transparent 1px)",
+            "linear-gradient(90deg, var(--page-grid-line) 1px, transparent 1px)",
+            "radial-gradient(ellipse 60% 40% at 50% 0%, var(--page-grid-glow) 0%, transparent 70%)",
           ].join(", "),
           backgroundSize: "40px 40px, 40px 40px, 100% 100%",
         }}
       >
-        <DataFreshnessBar progress={freshnessProgress} />
-
         {error && (
           <div className="mb-4 row-fade-in">
             <ErrorCard message={error} onRetry={handleRefresh} />
@@ -251,7 +204,7 @@ export function DashboardClient({ initialData }: DashboardClientProps) {
                 deltaLabel="vs yesterday"
                 color="brand"
                 icon={UserPlus}
-                sparklineData={signupData.map((s) => s.signups)}
+                sparklineData={signupSparkline}
               />
               <KPICard
                 label="Active Shops"
@@ -270,7 +223,7 @@ export function DashboardClient({ initialData }: DashboardClientProps) {
                 deltaLabel="MoM"
                 color="success"
                 icon={DollarSign}
-                sparklineData={mrrData.map((m) => m.mrr)}
+                sparklineData={mrrSparkline}
               />
               <KPICard
                 label="Churn Rate"
@@ -300,53 +253,45 @@ export function DashboardClient({ initialData }: DashboardClientProps) {
             </KPIGrid>
           </div>
 
-          <div
-            className="row-fade-in grid gap-4 grid-cols-1 xl:grid-cols-[65%_1fr]"
-            style={{ animationDelay: "200ms" }}
-          >
-            <div style={{ minHeight: 280 }}>
-              <SignupChart data={signupData} isLoading={chartLoading} />
+          <LazySection height={320}>
+            <div className="grid gap-4 grid-cols-1 xl:grid-cols-[65%_1fr]">
+              <div style={{ minHeight: 280 }}>
+                <SignupChart data={signupData} isLoading={chartLoading} />
+              </div>
+              <div style={{ minHeight: 280 }}>
+                <AIBriefing metricsSnapshot={metricsSnapshot} />
+              </div>
             </div>
-            <div style={{ minHeight: 280 }}>
-              <AIBriefing metricsSnapshot={metricsSnapshot} />
-            </div>
-          </div>
+          </LazySection>
 
-          <div
-            className="row-fade-in grid gap-4 grid-cols-1 lg:grid-cols-3"
-            style={{ animationDelay: "300ms" }}
-          >
-            <MRRChart data={mrrData} isLoading={chartLoading} />
-            <TicketChart data={ticketData} isLoading={chartLoading} />
-            <NPSCard
-              score={data.today.npsScore}
-              promoters={data.npsBreakdown.promoters}
-              passives={data.npsBreakdown.passives}
-              detractors={data.npsBreakdown.detractors}
-              delta={data.today.npsDelta}
-              isLoading={chartLoading}
-            />
-          </div>
-
-          <div
-            className="row-fade-in grid gap-4 grid-cols-1 lg:grid-cols-[55%_1fr]"
-            style={{ animationDelay: "400ms" }}
-          >
-            <ActivityFeed />
-            <div className="flex flex-col gap-4">
-              <FeatureRequestsPanel data={data.topFeatureRequests} />
-              <SupportHealthPanel data={supportData} />
+          <LazySection height={300}>
+            <div className="grid gap-4 grid-cols-1 lg:grid-cols-3">
+              <MRRChart data={mrrData} isLoading={chartLoading} />
+              <TicketChart data={ticketData} isLoading={chartLoading} />
+              <NPSCard
+                score={data.today.npsScore}
+                promoters={data.npsBreakdown.promoters}
+                passives={data.npsBreakdown.passives}
+                detractors={data.npsBreakdown.detractors}
+                delta={data.today.npsDelta}
+                isLoading={chartLoading}
+              />
             </div>
-          </div>
+          </LazySection>
+
+          <LazySection height={340}>
+            <div className="grid gap-4 grid-cols-1 lg:grid-cols-[55%_1fr]">
+              <ActivityFeed />
+              <div className="flex flex-col gap-4">
+                <FeatureRequestsPanel data={data.topFeatureRequests} />
+                <SupportHealthPanel data={supportData} />
+              </div>
+            </div>
+          </LazySection>
         </div>
       </main>
 
       <Toaster />
-      <KeyboardShortcutsModal
-        isOpen={showShortcuts}
-        onClose={() => setShowShortcuts(false)}
-        groups={SHORTCUT_GROUPS}
-      />
     </ToastContext.Provider>
   );
 }

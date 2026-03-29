@@ -1,7 +1,6 @@
 "use client";
 
 import {
-  BarChart,
   Bar,
   XAxis,
   YAxis,
@@ -9,6 +8,7 @@ import {
   Tooltip,
   ResponsiveContainer,
 } from "recharts";
+import { LazyBarChart as BarChart } from "@/components/charts/lazy";
 import { ChartCard } from "./ChartCard";
 import { CustomTooltip } from "./CustomTooltip";
 import { EmptyState } from "./EmptyState";
@@ -91,7 +91,7 @@ export function TicketChart({ data, isLoading }: TicketChartProps) {
                 width: 7,
                 height: 7,
                 borderRadius: "50%",
-                background: "#EF4444",
+                background: "var(--danger)",
                 opacity: 0.7,
                 display: "inline-block",
               }}
@@ -112,7 +112,7 @@ export function TicketChart({ data, isLoading }: TicketChartProps) {
                 width: 7,
                 height: 7,
                 borderRadius: "50%",
-                background: "#0E7169",
+                background: "var(--brand)",
                 display: "inline-block",
               }}
             />
@@ -147,15 +147,15 @@ export function TicketChart({ data, isLoading }: TicketChartProps) {
             <Tooltip
               content={
                 <CustomTooltip
-                  colorMap={{ opened: "#EF4444", resolved: "#0E7169" }}
+                  colorMap={{ opened: "var(--danger)", resolved: "var(--brand)" }}
                 />
               }
-              cursor={{ fill: "rgba(255,255,255,0.02)" }}
+              cursor={{ fill: "var(--chart-cursor)" }}
             />
             <Bar
               dataKey="opened"
               name="Opened"
-              fill="#EF4444"
+              fill="var(--danger)"
               fillOpacity={0.5}
               radius={CHART_BAR_RADIUS}
               {...CHART_ANIMATION}
@@ -163,7 +163,7 @@ export function TicketChart({ data, isLoading }: TicketChartProps) {
             <Bar
               dataKey="resolved"
               name="Resolved"
-              fill="#0E7169"
+              fill="var(--brand)"
               radius={CHART_BAR_RADIUS}
               {...CHART_ANIMATION}
             />

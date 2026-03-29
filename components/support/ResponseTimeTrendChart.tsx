@@ -2,7 +2,6 @@
 
 import { useMemo } from "react";
 import {
-  ComposedChart,
   Area,
   Line,
   XAxis,
@@ -12,6 +11,7 @@ import {
   ReferenceLine,
   ResponsiveContainer,
 } from "recharts";
+import { LazyComposedChart as ComposedChart } from "@/components/charts/lazy";
 import { ChartCard } from "@/components/dashboard/ChartCard";
 import { ChartSkeleton } from "@/components/dashboard/ChartSkeleton";
 import { EmptyState } from "@/components/dashboard/EmptyState";
@@ -106,8 +106,8 @@ export function ResponseTimeTrendChart({ data, slaPerformance, isLoading }: Resp
           <ComposedChart data={data}>
             <defs>
               <linearGradient id="responseAreaGrad" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="0%" stopColor="#0E7169" stopOpacity={0.3} />
-                <stop offset="100%" stopColor="#0E7169" stopOpacity={0.05} />
+                <stop offset="0%" stopColor="var(--brand)" stopOpacity={0.3} />
+                <stop offset="100%" stopColor="var(--brand)" stopOpacity={0.05} />
               </linearGradient>
             </defs>
             <CartesianGrid {...CHART_GRID} />
@@ -152,7 +152,7 @@ export function ResponseTimeTrendChart({ data, slaPerformance, isLoading }: Resp
                   <div
                     style={{
                       background: CHART_TOOLTIP_BG,
-                      border: "1px solid rgba(255,255,255,0.1)",
+                      border: "var(--chart-tooltip-border)",
                       borderRadius: 8,
                       padding: "10px 14px",
                       fontFamily: "var(--font-data)",
@@ -161,14 +161,14 @@ export function ResponseTimeTrendChart({ data, slaPerformance, isLoading }: Resp
                   >
                     <p style={{ color: "var(--text-muted)", marginBottom: 6 }}>{label}</p>
                     <div className="flex items-center gap-2" style={{ marginTop: 3 }}>
-                      <span style={{ width: 7, height: 7, borderRadius: "50%", background: "#0E7169" }} />
+                      <span style={{ width: 7, height: 7, borderRadius: "50%", background: "var(--brand)" }} />
                       <span style={{ color: "var(--text-secondary)" }}>First Response</span>
                       <span style={{ color: response > 60 ? "var(--danger)" : "var(--text-primary)", fontWeight: 600, marginLeft: "auto" }}>
                         {response} min
                       </span>
                     </div>
                     <div className="flex items-center gap-2" style={{ marginTop: 3 }}>
-                      <span style={{ width: 7, height: 7, borderRadius: "50%", background: "#F59E0B" }} />
+                      <span style={{ width: 7, height: 7, borderRadius: "50%", background: "var(--warning)" }} />
                       <span style={{ color: "var(--text-secondary)" }}>Resolution</span>
                       <span style={{ color: resolution > 24 ? "var(--danger)" : "var(--text-primary)", fontWeight: 600, marginLeft: "auto" }}>
                         {resolution.toFixed(1)} hrs
@@ -177,7 +177,7 @@ export function ResponseTimeTrendChart({ data, slaPerformance, isLoading }: Resp
                   </div>
                 );
               }}
-              cursor={{ fill: "rgba(255,255,255,0.02)" }}
+              cursor={{ fill: "var(--chart-cursor)" }}
             />
             <ReferenceLine
               yAxisId="left"
@@ -196,7 +196,7 @@ export function ResponseTimeTrendChart({ data, slaPerformance, isLoading }: Resp
               yAxisId="left"
               dataKey="avgResponseMin"
               name="First Response"
-              stroke="#0E7169"
+              stroke="var(--brand)"
               strokeWidth={2}
               fill="url(#responseAreaGrad)"
               dot={false}
@@ -235,7 +235,7 @@ export function ResponseTimeTrendChart({ data, slaPerformance, isLoading }: Resp
               yAxisId="right"
               dataKey="avgResolutionHrs"
               name="Resolution"
-              stroke="#F59E0B"
+              stroke="var(--warning)"
               strokeWidth={2}
               dot={false}
               {...CHART_ANIMATION}

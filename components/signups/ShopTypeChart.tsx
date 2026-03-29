@@ -1,13 +1,13 @@
 "use client";
 
 import {
-  BarChart,
   Bar,
   XAxis,
   YAxis,
   Tooltip,
   ResponsiveContainer,
 } from "recharts";
+import { LazyBarChart as BarChart } from "@/components/charts/lazy";
 import { ChartCard } from "@/components/dashboard/ChartCard";
 import { CustomTooltip } from "@/components/dashboard/CustomTooltip";
 import { ChartSkeleton } from "@/components/dashboard/ChartSkeleton";
@@ -71,8 +71,8 @@ export function ShopTypeChart({ data, isLoading }: ShopTypeChartProps) {
           >
             <defs>
               <linearGradient id="shopTypeGrad" x1="0" y1="0" x2="1" y2="0">
-                <stop offset="0%" stopColor="#0E7169" stopOpacity={0.6} />
-                <stop offset="100%" stopColor="#0E7169" stopOpacity={1} />
+                <stop offset="0%" stopColor="var(--brand)" stopOpacity={0.6} />
+                <stop offset="100%" stopColor="var(--brand)" stopOpacity={1} />
               </linearGradient>
             </defs>
             <XAxis type="number" hide />
@@ -89,9 +89,9 @@ export function ShopTypeChart({ data, isLoading }: ShopTypeChartProps) {
             />
             <Tooltip
               content={
-                <CustomTooltip colorMap={{ count: "#0E7169" }} />
+                <CustomTooltip colorMap={{ count: "var(--brand)" }} />
               }
-              cursor={{ fill: "rgba(255,255,255,0.02)" }}
+              cursor={{ fill: "var(--chart-cursor)" }}
             />
             <Bar
               dataKey="count"

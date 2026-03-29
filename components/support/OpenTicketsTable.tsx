@@ -27,16 +27,16 @@ interface OpenTicketsTableProps {
 const PRIORITY_ORDER: Record<string, number> = { urgent: 4, high: 3, normal: 2, low: 1 };
 
 const PRIORITY_CONFIG: Record<string, { label: string; bg: string; color: string; border: string }> = {
-  urgent: { label: "Urgent", bg: "rgba(239,68,68,0.15)", color: "#EF4444", border: "#EF4444" },
+  urgent: { label: "Urgent", bg: "var(--danger-dim)", color: "var(--danger)", border: "var(--danger)" },
   high: { label: "High", bg: "rgba(249,115,22,0.15)", color: "#F97316", border: "#F97316" },
   normal: { label: "Normal", bg: "var(--surface-3)", color: "var(--text-secondary)", border: "transparent" },
   low: { label: "Low", bg: "var(--surface-2)", color: "var(--text-muted)", border: "transparent" },
 };
 
 const STATUS_CONFIG: Record<string, { label: string; bg: string; color: string; pulse?: boolean }> = {
-  open: { label: "Open", bg: "rgba(59,130,246,0.15)", color: "#3B82F6" },
-  in_progress: { label: "In Progress", bg: "rgba(14,113,105,0.15)", color: "#0E7169", pulse: true },
-  waiting: { label: "Waiting", bg: "rgba(245,158,11,0.15)", color: "#F59E0B" },
+  open: { label: "Open", bg: "var(--info-dim)", color: "var(--info)" },
+  in_progress: { label: "In Progress", bg: "var(--brand-dim)", color: "var(--brand)", pulse: true },
+  waiting: { label: "Waiting", bg: "var(--warning-dim)", color: "var(--warning)" },
 };
 
 const CHANNEL_ICONS: Record<string, React.ComponentType<{ style?: React.CSSProperties }>> = {
@@ -47,12 +47,12 @@ const CHANNEL_ICONS: Record<string, React.ComponentType<{ style?: React.CSSPrope
 };
 
 const CATEGORY_COLORS: Record<string, string> = {
-  Billing: "#0E7169",
-  "Sync Issues": "#3B82F6",
-  "Bug Reports": "#EF4444",
-  "Feature Requests": "#F59E0B",
+  Billing: "var(--brand)",
+  "Sync Issues": "var(--info)",
+  "Bug Reports": "var(--danger)",
+  "Feature Requests": "var(--warning)",
   Onboarding: "#8B5CF6",
-  General: "#6B7280",
+  General: "var(--text-muted)",
 };
 
 type FilterKey = "all" | "urgent" | "high" | "Billing" | "Sync Issues" | "unassigned";
@@ -231,16 +231,16 @@ export function OpenTicketsTable({ data, isLoading }: OpenTicketsTableProps) {
                     style={{
                       cursor: "pointer",
                       borderLeft: isUrgent ? "3px solid var(--danger)" : "3px solid transparent",
-                      background: needsAttention ? "rgba(239,68,68,0.04)" : "transparent",
+                      background: needsAttention ? "var(--danger-dim)" : "transparent",
                     }}
                     onMouseEnter={(e) => {
                       e.currentTarget.style.background = needsAttention
-                        ? "rgba(239,68,68,0.08)"
+                        ? "var(--danger-dim)"
                         : "var(--surface-3)";
                     }}
                     onMouseLeave={(e) => {
                       e.currentTarget.style.background = needsAttention
-                        ? "rgba(239,68,68,0.04)"
+                        ? "var(--danger-dim)"
                         : "transparent";
                     }}
                   >

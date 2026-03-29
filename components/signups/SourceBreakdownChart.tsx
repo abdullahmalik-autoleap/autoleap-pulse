@@ -1,13 +1,13 @@
 "use client";
 
 import {
-  BarChart,
   Bar,
   XAxis,
   YAxis,
   Tooltip,
   ResponsiveContainer,
 } from "recharts";
+import { LazyBarChart as BarChart } from "@/components/charts/lazy";
 import { ChartCard } from "@/components/dashboard/ChartCard";
 import { CustomTooltip } from "@/components/dashboard/CustomTooltip";
 import { ChartSkeleton } from "@/components/dashboard/ChartSkeleton";
@@ -120,15 +120,15 @@ export function SourceBreakdownChart({ data, isLoading }: SourceBreakdownChartPr
             <Tooltip
               content={
                 <CustomTooltip
-                  colorMap={{ count: "#0E7169", conversions: "#0E716944" }}
+                  colorMap={{ count: "var(--brand)", conversions: "var(--brand-dim)" }}
                 />
               }
-              cursor={{ fill: "rgba(255,255,255,0.02)" }}
+              cursor={{ fill: "var(--chart-cursor)" }}
             />
             <Bar
               dataKey="count"
               name="Signups"
-              fill="#0E7169"
+              fill="var(--brand)"
               radius={[0, 3, 3, 0]}
               barSize={12}
               {...CHART_ANIMATION}
@@ -137,7 +137,7 @@ export function SourceBreakdownChart({ data, isLoading }: SourceBreakdownChartPr
             <Bar
               dataKey="conversions"
               name="Conversions"
-              fill="rgba(14,113,105,0.4)"
+              fill="var(--chart-brand-grad-start)"
               radius={[0, 3, 3, 0]}
               barSize={12}
               {...CHART_ANIMATION}
@@ -181,7 +181,7 @@ export function SourceBreakdownChart({ data, isLoading }: SourceBreakdownChartPr
                     background: isBest
                       ? "var(--brand-dim)"
                       : i % 2 === 1
-                        ? "rgba(255,255,255,0.02)"
+                        ? "var(--chart-cursor)"
                         : "transparent",
                   }}
                 >

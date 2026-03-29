@@ -16,13 +16,13 @@ import { PageHeader } from "@/components/dashboard/PageHeader";
 import { KPICard } from "@/components/dashboard/KPICard";
 import { KPIGrid } from "@/components/dashboard/KPIGrid";
 import { ErrorCard } from "@/components/dashboard/ErrorCard";
-import { KeyboardShortcutsModal } from "@/components/dashboard/KeyboardShortcutsModal";
 import { TicketVolumeTrendChart } from "./TicketVolumeTrendChart";
 import { ResponseTimeTrendChart } from "./ResponseTimeTrendChart";
 import { CSATChart } from "./CSATChart";
 import { CategoryBreakdown } from "./CategoryBreakdown";
 import { SLAPerformanceCard } from "./SLAPerformanceCard";
 import { OpenTicketsTable } from "./OpenTicketsTable";
+import { LazySection } from "@/components/lazy-section";
 
 interface SupportSummary {
   openTickets: number;
@@ -129,24 +129,6 @@ const SUPPORT_RANGES: { key: DateRange; label: string; shortcut?: string }[] = [
   { key: "90d", label: "90D", shortcut: "9" },
 ];
 
-const SHORTCUT_GROUPS = [
-  {
-    title: "General",
-    shortcuts: [
-      { key: "R", description: "Refresh data" },
-      { key: "?", description: "Show keyboard shortcuts" },
-    ],
-  },
-  {
-    title: "Date Range",
-    shortcuts: [
-      { key: "7", description: "7 days" },
-      { key: "3", description: "30 days" },
-      { key: "9", description: "90 days" },
-    ],
-  },
-];
-
 export function SupportClient() {
   const [dateRange, setDateRange] = useState<DateRange>("30d");
   const [data, setData] = useState<SupportData | null>(null);
@@ -154,8 +136,6 @@ export function SupportClient() {
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [lastUpdated, setLastUpdated] = useState<Date | undefined>();
   const [error, setError] = useState<string | null>(null);
-  const [showShortcuts, setShowShortcuts] = useState(false);
-
   const fetchData = useCallback(
     async (range: DateRange, isRangeChange = false) => {
       if (isRangeChange) setIsLoading(true);
@@ -217,10 +197,6 @@ export function SupportClient() {
           handleRangeChange("90d");
           fetchData("90d", true);
           break;
-        case "?":
-          e.preventDefault();
-          setShowShortcuts((v) => !v);
-          break;
       }
     }
     window.addEventListener("keydown", handleKeyDown);
@@ -256,9 +232,9 @@ export function SupportClient() {
         style={{
           padding: 24,
           backgroundImage: [
-            "linear-gradient(rgba(255,255,255,0.015) 1px, transparent 1px)",
-            "linear-gradient(90deg, rgba(255,255,255,0.015) 1px, transparent 1px)",
-            "radial-gradient(ellipse 60% 40% at 50% 0%, rgba(14,113,105,0.06) 0%, transparent 70%)",
+            "linear-gradient(var(--page-grid-line) 1px, transparent 1px)",
+            "linear-gradient(90deg, var(--page-grid-line) 1px, transparent 1px)",
+            "radial-gradient(ellipse 60% 40% at 50% 0%, var(--page-grid-glow) 0%, transparent 70%)",
           ].join(", "),
           backgroundSize: "40px 40px, 40px 40px, 100% 100%",
         }}
@@ -336,66 +312,62 @@ export function SupportClient() {
             </KPIGrid>
           </div>
 
-          <div className="row-fade-in" style={{ animationDelay: "200ms" }}>
+          <LazySection height={360}>
             <TicketVolumeTrendChart
               data={data?.ticketTrend ?? []}
               isLoading={isLoading}
             />
-          </div>
+          </LazySection>
 
-          <div
-            className="grid row-fade-in"
-            style={{
-              gridTemplateColumns: "55fr 45fr",
-              gap: 16,
-              animationDelay: "300ms",
-            }}
-          >
-            <ResponseTimeTrendChart
-              data={data?.responseTimeTrend ?? []}
-              slaPerformance={data?.slaPerformance ?? null}
-              isLoading={isLoading}
-            />
-            <CSATChart
-              score={s?.csatScore ?? 0}
-              trend={data?.csatTrend ?? []}
-              distribution={data?.csatDistribution ?? []}
-              isLoading={isLoading}
-            />
-          </div>
+          <LazySection height={320}>
+            <div
+              className="grid"
+              style={{
+                gridTemplateColumns: "55fr 45fr",
+                gap: 16,
+              }}
+            >
+              <ResponseTimeTrendChart
+                data={data?.responseTimeTrend ?? []}
+                slaPerformance={data?.slaPerformance ?? null}
+                isLoading={isLoading}
+              />
+              <CSATChart
+                score={s?.csatScore ?? 0}
+                trend={data?.csatTrend ?? []}
+                distribution={data?.csatDistribution ?? []}
+                isLoading={isLoading}
+              />
+            </div>
+          </LazySection>
 
-          <div className="row-fade-in" style={{ animationDelay: "400ms" }}>
+          <LazySection height={300}>
             <CategoryBreakdown
               data={data?.byCategory ?? []}
               isLoading={isLoading}
             />
-          </div>
+          </LazySection>
 
-          <div
-            className="grid row-fade-in"
-            style={{
-              gridTemplateColumns: "60fr 40fr",
-              gap: 16,
-              animationDelay: "500ms",
-            }}
-          >
-            <OpenTicketsTable
-              data={data?.openTickets ?? []}
-              isLoading={isLoading}
-            />
-            <SLAPerformanceCard
-              data={data?.slaPerformance ?? null}
-              isLoading={isLoading}
-            />
-          </div>
+          <LazySection height={400}>
+            <div
+              className="grid"
+              style={{
+                gridTemplateColumns: "60fr 40fr",
+                gap: 16,
+              }}
+            >
+              <OpenTicketsTable
+                data={data?.openTickets ?? []}
+                isLoading={isLoading}
+              />
+              <SLAPerformanceCard
+                data={data?.slaPerformance ?? null}
+                isLoading={isLoading}
+              />
+            </div>
+          </LazySection>
         </div>
       </main>
-
-      <KeyboardShortcutsModal
-        isOpen={showShortcuts}
-        onClose={() => setShowShortcuts(false)}
-        groups={SHORTCUT_GROUPS}
-      />
     </>
   );
 }

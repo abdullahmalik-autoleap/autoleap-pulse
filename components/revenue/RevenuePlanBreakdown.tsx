@@ -1,10 +1,10 @@
 "use client";
 
 import {
-  AreaChart,
   Area,
   ResponsiveContainer,
 } from "recharts";
+import { LazyAreaChart as AreaChart } from "@/components/charts/lazy";
 import { ChartCard } from "@/components/dashboard/ChartCard";
 import { ChartSkeleton } from "@/components/dashboard/ChartSkeleton";
 import { EmptyState } from "@/components/dashboard/EmptyState";
@@ -33,9 +33,9 @@ interface RevenuePlanBreakdownProps {
 }
 
 const PLAN_CONFIG: Record<string, { label: string; color: string; dimColor: string }> = {
-  starter: { label: "Starter", color: "rgba(14,113,105,0.5)", dimColor: "rgba(14,113,105,0.1)" },
-  pro: { label: "Pro", color: "#0E7169", dimColor: "rgba(14,113,105,0.15)" },
-  enterprise: { label: "Enterprise", color: "#0f857b", dimColor: "rgba(15,133,123,0.15)" },
+  starter: { label: "Starter", color: "var(--chart-brand-grad-start)", dimColor: "var(--brand-dim)" },
+  pro: { label: "Pro", color: "var(--brand)", dimColor: "var(--brand-dim)" },
+  enterprise: { label: "Enterprise", color: "var(--brand-hover)", dimColor: "var(--brand-dim)" },
 };
 
 export function RevenuePlanBreakdown({ plans, planMixTrend, isLoading }: RevenuePlanBreakdownProps) {
@@ -183,41 +183,44 @@ export function RevenuePlanBreakdown({ plans, planMixTrend, isLoading }: Revenue
               <AreaChart data={planMixTrend} stackOffset="expand">
                 <defs>
                   <linearGradient id="starterGrad" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="0%" stopColor="rgba(14,113,105,0.5)" stopOpacity={0.8} />
-                    <stop offset="100%" stopColor="rgba(14,113,105,0.5)" stopOpacity={0.2} />
+                    <stop offset="0%" stopColor="var(--chart-brand-grad-start)" stopOpacity={0.8} />
+                    <stop offset="100%" stopColor="var(--chart-brand-grad-start)" stopOpacity={0.2} />
                   </linearGradient>
                   <linearGradient id="proGrad" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="0%" stopColor="#0E7169" stopOpacity={0.8} />
-                    <stop offset="100%" stopColor="#0E7169" stopOpacity={0.3} />
+                    <stop offset="0%" stopColor="var(--brand)" stopOpacity={0.8} />
+                    <stop offset="100%" stopColor="var(--brand)" stopOpacity={0.3} />
                   </linearGradient>
                   <linearGradient id="enterpriseGrad" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="0%" stopColor="#0f857b" stopOpacity={0.9} />
-                    <stop offset="100%" stopColor="#0f857b" stopOpacity={0.4} />
+                    <stop offset="0%" stopColor="var(--brand-hover)" stopOpacity={0.9} />
+                    <stop offset="100%" stopColor="var(--brand-hover)" stopOpacity={0.4} />
                   </linearGradient>
                 </defs>
                 <Area
                   type="monotone"
                   dataKey="starter"
                   stackId="1"
-                  stroke="rgba(14,113,105,0.5)"
+                  stroke="var(--chart-brand-grad-start)"
                   strokeWidth={0}
                   fill="url(#starterGrad)"
+                  {...CHART_ANIMATION}
                 />
                 <Area
                   type="monotone"
                   dataKey="pro"
                   stackId="1"
-                  stroke="#0E7169"
+                  stroke="var(--brand)"
                   strokeWidth={0}
                   fill="url(#proGrad)"
+                  {...CHART_ANIMATION}
                 />
                 <Area
                   type="monotone"
                   dataKey="enterprise"
                   stackId="1"
-                  stroke="#0f857b"
+                  stroke="var(--brand-hover)"
                   strokeWidth={0}
                   fill="url(#enterpriseGrad)"
+                  {...CHART_ANIMATION}
                 />
               </AreaChart>
             </ResponsiveContainer>

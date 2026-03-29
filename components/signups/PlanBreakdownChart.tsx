@@ -1,12 +1,12 @@
 "use client";
 
 import {
-  PieChart,
   Pie,
   Cell,
   Tooltip,
   ResponsiveContainer,
 } from "recharts";
+import { LazyPieChart as PieChart } from "@/components/charts/lazy";
 import { ChartCard } from "@/components/dashboard/ChartCard";
 import { ChartSkeleton } from "@/components/dashboard/ChartSkeleton";
 import { EmptyState } from "@/components/dashboard/EmptyState";
@@ -25,9 +25,9 @@ interface PlanBreakdownChartProps {
 }
 
 const PLAN_CONFIG: Record<string, { color: string; label: string }> = {
-  starter: { color: "rgba(14,113,105,0.4)", label: "Starter" },
-  pro: { color: "#0E7169", label: "Pro" },
-  enterprise: { color: "#3B82F6", label: "Enterprise" },
+  starter: { color: "var(--chart-brand-grad-start)", label: "Starter" },
+  pro: { color: "var(--brand)", label: "Pro" },
+  enterprise: { color: "var(--info)", label: "Enterprise" },
 };
 
 function PlanTooltip({
@@ -43,7 +43,7 @@ function PlanTooltip({
     <div
       style={{
         background: CHART_TOOLTIP_BG,
-        border: "1px solid rgba(255,255,255,0.1)",
+        border: "var(--chart-tooltip-border)",
         borderRadius: 8,
         padding: "10px 14px",
         fontFamily: "var(--font-data)",
@@ -92,7 +92,7 @@ export function PlanBreakdownChart({ data, isLoading }: PlanBreakdownChartProps)
               {data.map((d) => (
                 <Cell
                   key={d.plan}
-                  fill={PLAN_CONFIG[d.plan]?.color ?? "#6B7280"}
+                  fill={PLAN_CONFIG[d.plan]?.color ?? "var(--text-muted)"}
                   stroke="none"
                 />
               ))}
@@ -149,7 +149,7 @@ export function PlanBreakdownChart({ data, isLoading }: PlanBreakdownChartProps)
                   width: 10,
                   height: 10,
                   borderRadius: 2,
-                  background: config?.color ?? "#6B7280",
+                  background: config?.color ?? "var(--text-muted)",
                   flexShrink: 0,
                 }}
               />

@@ -152,9 +152,9 @@ export function RegionalBreakdown({ data, isLoading }: RegionalBreakdownProps) {
                     width={shape.w}
                     height={shape.h}
                     rx={6}
-                    fill="#0E7169"
+                    fill="var(--brand)"
                     fillOpacity={opacity}
-                    stroke={isHovered ? "#0E7169" : "rgba(255,255,255,0.1)"}
+                    stroke={isHovered ? "var(--brand)" : "var(--pulse-border)"}
                     strokeWidth={isHovered ? 2 : 1}
                     style={{ transition: "all 0.2s ease" }}
                   />
@@ -196,8 +196,8 @@ export function RegionalBreakdown({ data, isLoading }: RegionalBreakdownProps) {
                   left: `${((shape.x + shape.w / 2) / 460) * 100}%`,
                   top: `${((shape.y) / 280) * 100 - 5}%`,
                   transform: "translate(-50%, -100%)",
-                  background: "#1A2B42",
-                  border: "1px solid rgba(255,255,255,0.1)",
+                  background: "var(--chart-tooltip-bg)",
+                  border: "var(--chart-tooltip-border)",
                   borderRadius: 8,
                   padding: "8px 12px",
                   fontFamily: "var(--font-data)",
