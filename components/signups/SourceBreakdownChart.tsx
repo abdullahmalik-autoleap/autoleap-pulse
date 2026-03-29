@@ -97,12 +97,13 @@ export function SourceBreakdownChart({ data, isLoading }: SourceBreakdownChartPr
         ) : undefined
       }
     >
-      <div style={{ height: 180 }}>
+      <div style={{ height: Math.max(chartData.length * 40 + 20, 120) }}>
         <ResponsiveContainer width="100%" height="100%">
           <BarChart
             data={chartData}
             layout="vertical"
             barGap={4}
+            barCategoryGap="25%"
             margin={{ left: 0, right: 40 }}
           >
             <XAxis type="number" hide />

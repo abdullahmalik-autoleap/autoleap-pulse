@@ -29,17 +29,18 @@ export function KPICardSkeleton() {
         border: "1px solid var(--pulse-border)",
         borderRadius: 12,
         padding: 20,
+        height: 148,
       }}
     >
       <div className="flex items-center gap-2">
-        <Skeleton width={16} height={16} borderRadius={4} />
+        <Skeleton width={18} height={18} borderRadius={4} />
         <Skeleton width={80} height={12} />
       </div>
-      <div style={{ marginTop: 10 }}>
+      <div style={{ marginTop: 8 }}>
         <Skeleton width={100} height={32} />
       </div>
       <div style={{ marginTop: 10 }}>
-        <Skeleton width={120} height={18} />
+        <Skeleton width={64} height={22} borderRadius={4} />
       </div>
     </div>
   );

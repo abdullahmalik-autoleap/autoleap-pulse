@@ -220,7 +220,6 @@ export function SignupsClient() {
                 label="Total Signups"
                 value={s?.total ?? 0}
                 delta={s?.totalDelta}
-                deltaLabel="vs prior period"
                 color="brand"
                 icon={UserPlus}
                 loading={isLoading}
@@ -229,7 +228,6 @@ export function SignupsClient() {
                 label="Converted to Paid"
                 value={s?.converted ?? 0}
                 delta={s?.totalDelta}
-                deltaLabel="vs prior period"
                 color="success"
                 icon={CheckCircle}
                 loading={isLoading}
@@ -239,7 +237,6 @@ export function SignupsClient() {
                 value={s?.conversionRate ?? 0}
                 suffix="%"
                 delta={s?.conversionDelta}
-                deltaLabel="vs prior period"
                 color="brand"
                 icon={TrendingUp}
                 loading={isLoading}
@@ -255,7 +252,6 @@ export function SignupsClient() {
                 label="Avg / Day"
                 value={s?.avgPerDay ?? 0}
                 delta={s?.totalDelta}
-                deltaLabel="vs prior period"
                 color="success"
                 icon={BarChart2}
                 loading={isLoading}
@@ -268,18 +264,6 @@ export function SignupsClient() {
                 loading={isLoading}
               />
             </KPIGrid>
-            <div className="flex justify-end mt-1 pr-1">
-              <span
-                style={{
-                  fontSize: 10,
-                  fontFamily: "var(--font-data)",
-                  color: "var(--text-muted)",
-                  letterSpacing: "0.02em",
-                }}
-              >
-                at current pace
-              </span>
-            </div>
           </div>
 
           <LazySection height={360}>

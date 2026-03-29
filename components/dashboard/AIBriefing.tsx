@@ -34,6 +34,7 @@ export function AIBriefing({ metricsSnapshot }: AIBriefingProps) {
   const [error, setError] = useState("");
   const [generatedAt, setGeneratedAt] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isHovered, setIsHovered] = useState(false);
   const abortRef = useRef<AbortController | null>(null);
   const { toast } = useToast();
 
@@ -95,13 +96,127 @@ export function AIBriefing({ metricsSnapshot }: AIBriefingProps) {
   const isIdle = status === "idle";
   const hasContent = status === "streaming" || status === "done";
 
+  if (isIdle) {
+    return (
+      <div
+        role="button"
+        tabIndex={0}
+        onClick={generate}
+        onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") generate(); }}
+        onMouseEnter={() => setIsHovered(true)}
+        onMouseLeave={() => setIsHovered(false)}
+        className="ai-briefing-idle"
+        style={{
+          borderRadius: 16,
+          padding: 32,
+          height: "100%",
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          justifyContent: "center",
+          cursor: "pointer",
+          border: isHovered
+            ? "1px solid rgba(14, 113, 105, 0.3)"
+            : "1px solid var(--ai-border)",
+          transform: isHovered ? "translateY(-1px)" : "translateY(0)",
+          boxShadow: isHovered
+            ? "0 8px 24px rgba(14, 113, 105, 0.08)"
+            : "none",
+          transition: "all 200ms ease",
+          outline: "none",
+          position: "relative",
+          overflow: "hidden",
+        }}
+      >
+        {/* Icon circle */}
+        <div
+          style={{
+            width: 56,
+            height: 56,
+            borderRadius: "50%",
+            background: isHovered
+              ? "rgba(14, 113, 105, 0.15)"
+              : "rgba(14, 113, 105, 0.1)",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            transition: "background 200ms ease",
+          }}
+        >
+          <Sparkles
+            style={{
+              width: 32,
+              height: 32,
+              color: "#0E7169",
+              opacity: isHovered ? 1 : 0.7,
+              transition: "opacity 200ms ease",
+            }}
+          />
+        </div>
+
+        {/* Title */}
+        <span
+          style={{
+            fontSize: 16,
+            fontWeight: 600,
+            color: "var(--text-primary)",
+            fontFamily: "var(--font-display)",
+            marginTop: 16,
+          }}
+        >
+          AI Daily Briefing
+        </span>
+
+        {/* Description */}
+        <span
+          style={{
+            fontSize: 13,
+            color: "var(--text-muted)",
+            textAlign: "center",
+            maxWidth: 300,
+            marginTop: 4,
+            lineHeight: 1.5,
+          }}
+        >
+          Generate an executive summary from today&apos;s metrics and activity
+        </span>
+
+        {/* Inline CTA */}
+        <span
+          style={{
+            fontSize: 13,
+            fontWeight: 500,
+            color: "#0E7169",
+            marginTop: 16,
+            fontFamily: "var(--font-data)",
+            textDecoration: isHovered ? "underline" : "none",
+            display: "inline-flex",
+            alignItems: "center",
+            gap: 4,
+          }}
+        >
+          Generate Briefing
+          <span
+            style={{
+              display: "inline-block",
+              transform: isHovered ? "translateX(2px)" : "translateX(0)",
+              transition: "transform 200ms ease",
+            }}
+          >
+            →
+          </span>
+        </span>
+      </div>
+    );
+  }
+
   return (
     <>
       <div
         className="relative overflow-hidden"
         style={{
-          background: "var(--ai-bg)",
-          border: "1px solid var(--ai-border)",
+          background: "var(--surface-1)",
+          border: "1px solid var(--pulse-border)",
           borderRadius: 16,
           padding: 24,
           height: "100%",
@@ -109,17 +224,8 @@ export function AIBriefing({ metricsSnapshot }: AIBriefingProps) {
           flexDirection: "column",
         }}
       >
-        <div
-          className="pointer-events-none absolute inset-0"
-          style={{
-            background: [
-              "radial-gradient(ellipse 50% 40% at 80% 10%, var(--ai-glow-1), transparent 70%)",
-              "radial-gradient(ellipse 40% 50% at 10% 90%, var(--ai-glow-2), transparent 70%)",
-            ].join(", "),
-          }}
-        />
-
         <div className="relative flex flex-col" style={{ flex: 1, overflow: "hidden" }}>
+          {/* Badge label */}
           <div className="flex items-center gap-2 self-start">
             <span
               className="inline-flex items-center gap-1.5 rounded-full px-2.5 py-1"
@@ -137,86 +243,20 @@ export function AIBriefing({ metricsSnapshot }: AIBriefingProps) {
               <Sparkles style={{ width: 10, height: 10 }} />
               AI Daily Briefing
             </span>
-          </div>
-
-          <h2
-            style={{
-              fontFamily: "var(--font-display)",
-              fontSize: 17,
-              fontWeight: 700,
-              color: "var(--text-primary)",
-              marginTop: 12,
-            }}
-          >
-            Today&apos;s Executive Summary
-          </h2>
-
-          {status === "done" && generatedAt && (
-            <p
-              style={{
-                fontFamily: "var(--font-data)",
-                fontSize: 11,
-                color: "var(--text-muted)",
-                marginTop: 4,
-              }}
-            >
-              Generated at {generatedAt} · Based on live data
-            </p>
-          )}
-
-          <div style={{ marginTop: 16, flex: 1, overflow: "hidden", display: "flex", flexDirection: "column" }}>
-            {isIdle && (
-              <div
+            {status === "done" && generatedAt && (
+              <span
                 style={{
-                  animation: "fadeIn 300ms ease",
-                  flex: 1,
-                  display: "flex",
-                  flexDirection: "column",
-                  justifyContent: "center",
+                  fontFamily: "var(--font-data)",
+                  fontSize: 11,
+                  color: "var(--text-muted)",
                 }}
               >
-                <p
-                  style={{
-                    fontSize: 13,
-                    color: "var(--text-secondary)",
-                    lineHeight: 1.6,
-                    marginBottom: 20,
-                  }}
-                >
-                  Generate an AI-powered executive summary based on your current
-                  metrics and activity signals.
-                </p>
-                <div>
-                  <button
-                    onClick={generate}
-                    className="inline-flex items-center gap-2 transition-all duration-200"
-                    style={{
-                      background: "linear-gradient(135deg, var(--brand), var(--brand-hover))",
-                      color: "#fff",
-                      fontFamily: "var(--font-display)",
-                      fontSize: 13,
-                      fontWeight: 600,
-                      border: "none",
-                      borderRadius: 10,
-                      padding: "10px 22px",
-                      boxShadow: "var(--shadow-md)",
-                    }}
-                    onMouseEnter={(e) => {
-                      e.currentTarget.style.boxShadow = "var(--shadow-lg)";
-                      e.currentTarget.style.transform = "translateY(-1px)";
-                    }}
-                    onMouseLeave={(e) => {
-                      e.currentTarget.style.boxShadow = "var(--shadow-md)";
-                      e.currentTarget.style.transform = "translateY(0)";
-                    }}
-                  >
-                    <Sparkles style={{ width: 14, height: 14 }} />
-                    Generate Briefing
-                  </button>
-                </div>
-              </div>
+                {generatedAt}
+              </span>
             )}
+          </div>
 
+          <div style={{ marginTop: 16, flex: 1, overflow: "hidden", display: "flex", flexDirection: "column" }}>
             {status === "loading" && (
               <div style={{ animation: "fadeIn 300ms ease" }}>
                 <p
@@ -280,6 +320,7 @@ export function AIBriefing({ metricsSnapshot }: AIBriefingProps) {
                     fontWeight: 600,
                     borderRadius: 8,
                     padding: "8px 16px",
+                    cursor: "pointer",
                   }}
                 >
                   Retry
@@ -297,6 +338,7 @@ export function AIBriefing({ metricsSnapshot }: AIBriefingProps) {
                   paddingTop: 12,
                   display: "flex",
                   gap: 8,
+                  alignItems: "center",
                 }}
               >
                 <button
@@ -311,61 +353,35 @@ export function AIBriefing({ metricsSnapshot }: AIBriefingProps) {
                     fontWeight: 500,
                     borderRadius: 6,
                     padding: "5px 12px",
-                  }}
-                  onMouseEnter={(e) => {
-                    e.currentTarget.style.background = "var(--brand-dim)";
-                  }}
-                  onMouseLeave={(e) => {
-                    e.currentTarget.style.background = "var(--brand-dim)";
+                    cursor: "pointer",
                   }}
                 >
                   <Eye style={{ width: 11, height: 11 }} />
                   View All
                 </button>
                 <button
-                  onClick={generate}
+                  onClick={(e) => { e.stopPropagation(); generate(); }}
                   className="flex items-center gap-1.5 transition-all duration-200"
                   style={{
                     background: "transparent",
-                    color: "var(--text-secondary)",
-                    border: "1px solid var(--pulse-border)",
+                    color: "var(--text-muted)",
+                    border: "none",
                     fontFamily: "var(--font-data)",
                     fontSize: 11,
                     fontWeight: 500,
-                    borderRadius: 6,
-                    padding: "5px 12px",
+                    padding: "5px 8px",
+                    cursor: "pointer",
+                    marginLeft: "auto",
                   }}
                   onMouseEnter={(e) => {
-                    e.currentTarget.style.background = "var(--surface-2)";
+                    e.currentTarget.style.color = "var(--text-secondary)";
                   }}
                   onMouseLeave={(e) => {
-                    e.currentTarget.style.background = "transparent";
+                    e.currentTarget.style.color = "var(--text-muted)";
                   }}
                 >
                   <RotateCw style={{ width: 11, height: 11 }} />
                   Regenerate
-                </button>
-                <button
-                  className="flex items-center gap-1.5 transition-all duration-200 ml-auto"
-                  style={{
-                    background: "transparent",
-                    color: "var(--text-secondary)",
-                    border: "1px solid var(--pulse-border)",
-                    fontFamily: "var(--font-data)",
-                    fontSize: 11,
-                    fontWeight: 500,
-                    borderRadius: 6,
-                    padding: "5px 12px",
-                  }}
-                  onMouseEnter={(e) => {
-                    e.currentTarget.style.background = "var(--surface-2)";
-                  }}
-                  onMouseLeave={(e) => {
-                    e.currentTarget.style.background = "transparent";
-                  }}
-                >
-                  <ExternalLink style={{ width: 11, height: 11 }} />
-                  Share
                 </button>
               </div>
             </div>

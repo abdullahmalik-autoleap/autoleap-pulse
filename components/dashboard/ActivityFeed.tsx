@@ -74,7 +74,7 @@ export function ActivityFeed() {
         </div>
       </div>
 
-      <div style={{ maxHeight: 380, overflowY: "auto", flex: 1 }}>
+      <div style={{ maxHeight: 380, overflowY: "auto" }}>
         {isLoading && events.length === 0 ? (
           <div style={{ padding: "20px 16px" }}>
             {Array.from({ length: 4 }).map((_, i) => (
@@ -173,19 +173,24 @@ export function ActivityFeed() {
       </div>
 
       <div
-        className="shrink-0"
         style={{
-          padding: "8px 20px",
-          borderTop: "1px solid var(--pulse-border)",
+          padding: "12px 0",
           textAlign: "center",
         }}
       >
         <span
+          className="activity-feed-cta"
           style={{
-            fontSize: 12,
+            fontSize: 13,
             fontFamily: "var(--font-data)",
-            color: "var(--brand)",
+            color: "#0E7169",
             cursor: "pointer",
+          }}
+          onMouseEnter={(e) => {
+            e.currentTarget.style.textDecoration = "underline";
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.style.textDecoration = "none";
           }}
         >
           View all activity →

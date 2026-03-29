@@ -37,7 +37,7 @@ export function SignupBreakdowns({
   isLoading,
 }: SignupBreakdownsProps) {
   return (
-    <div className="grid gap-4 grid-cols-1 lg:grid-cols-3" style={{ minHeight: 320 }}>
+    <div className="grid gap-4 grid-cols-1 lg:grid-cols-3">
       <SourceBreakdownChart data={bySource} isLoading={isLoading} />
       <PlanBreakdownChart data={byPlan} isLoading={isLoading} />
       <ShopTypeChart data={byShopType} isLoading={isLoading} />

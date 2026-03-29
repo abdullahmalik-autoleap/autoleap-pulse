@@ -71,7 +71,7 @@ export function CategoryBreakdown({ data, isLoading }: CategoryBreakdownProps) {
     >
       <div
         className="grid"
-        style={{ gridTemplateColumns: "40% 60%", gap: 20, minHeight: 260 }}
+        style={{ gridTemplateColumns: "40% 60%", gap: 20 }}
       >
         {/* LEFT: Category Table */}
         <div>
@@ -204,9 +204,9 @@ export function CategoryBreakdown({ data, isLoading }: CategoryBreakdownProps) {
               <span style={{ fontSize: 11, fontFamily: "var(--font-data)", color: "var(--text-secondary)" }}>Last Period</span>
             </div>
           </div>
-          <div style={{ height: 220 }}>
+          <div style={{ height: Math.max(chartData.length * 50 + 40, 120) }}>
             <ResponsiveContainer width="100%" height="100%">
-              <BarChart data={chartData} barGap={2}>
+              <BarChart data={chartData} barGap={4} barCategoryGap="20%">
                 <CartesianGrid
                   strokeDasharray="3 3"
                   stroke="var(--chart-grid)"

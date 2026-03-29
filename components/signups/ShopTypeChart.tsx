@@ -60,14 +60,17 @@ export function ShopTypeChart({ data, isLoading }: ShopTypeChartProps) {
     label: `${TYPE_EMOJIS[d.type] ?? ""} ${TYPE_LABELS[d.type] ?? d.type}`,
   }));
 
+  const chartHeight = Math.max(chartData.length * 48 + 20, 120);
+
   return (
     <ChartCard title="By Shop Type">
-      <div style={{ height: 260 }}>
+      <div style={{ height: chartHeight }}>
         <ResponsiveContainer width="100%" height="100%">
           <BarChart
             data={chartData}
             layout="vertical"
             margin={{ left: 10, right: 50 }}
+            barCategoryGap="25%"
           >
             <defs>
               <linearGradient id="shopTypeGrad" x1="0" y1="0" x2="1" y2="0">
@@ -98,7 +101,7 @@ export function ShopTypeChart({ data, isLoading }: ShopTypeChartProps) {
               name="Signups"
               fill="url(#shopTypeGrad)"
               radius={[0, 3, 3, 0]}
-              barSize={18}
+              barSize={24}
               {...CHART_ANIMATION}
               label={({ x, y, width, index }: { x?: string | number; y?: string | number; width?: string | number; index?: number }) => {
                 const nx = Number(x ?? 0);

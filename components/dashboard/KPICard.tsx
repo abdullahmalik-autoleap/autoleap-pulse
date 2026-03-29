@@ -2,18 +2,13 @@
 
 import { useCountUp } from "@/lib/hooks/useCountUp";
 import { ArrowUp, ArrowDown, type LucideIcon } from "lucide-react";
-import {
-  ResponsiveContainer,
-  Area,
-} from "recharts";
-import { LazyAreaChart as AreaChart } from "@/components/charts/lazy";
 
 const COLOR_MAP = {
-  brand: { solid: "var(--brand)", dim: "var(--brand-dim)", hex: "var(--brand)" },
-  success: { solid: "var(--success)", dim: "var(--success-dim)", hex: "var(--brand)" },
-  warning: { solid: "var(--warning)", dim: "var(--warning-dim)", hex: "var(--warning)" },
-  danger: { solid: "var(--danger)", dim: "var(--danger-dim)", hex: "var(--danger)" },
-  info: { solid: "var(--info)", dim: "var(--info-dim)", hex: "var(--info)" },
+  brand: "var(--brand)",
+  success: "var(--success)",
+  warning: "var(--warning)",
+  danger: "var(--danger)",
+  info: "var(--info)",
 } as const;
 
 type CardColor = keyof typeof COLOR_MAP;
@@ -24,11 +19,9 @@ interface KPICardProps {
   prefix?: string;
   suffix?: string;
   delta?: number;
-  deltaLabel?: string;
   color?: CardColor;
   icon?: LucideIcon;
   loading?: boolean;
-  sparklineData?: number[];
 }
 
 function formatValue(n: number, suffix?: string) {
@@ -42,11 +35,7 @@ function Shimmer({ width = "100%", height = 20 }: { width?: string | number; hei
   return (
     <div
       className="shimmer"
-      style={{
-        width,
-        height,
-        borderRadius: 6,
-      }}
+      style={{ width, height, borderRadius: 6 }}
     />
   );
 }
@@ -57,16 +46,13 @@ export function KPICard({
   prefix,
   suffix,
   delta,
-  deltaLabel,
   color = "brand",
   icon: Icon,
   loading = false,
-  sparklineData,
 }: KPICardProps) {
   const animated = useCountUp(loading ? 0 : value);
-  const colors = COLOR_MAP[color];
+  const accentColor = COLOR_MAP[color];
   const isPositive = delta !== undefined && delta >= 0;
-  const sparkData = sparklineData?.map((v, i) => ({ i, v }));
 
   return (
     <div
@@ -76,6 +62,9 @@ export function KPICard({
         border: "1px solid var(--pulse-border)",
         borderRadius: 12,
         padding: 20,
+        height: 148,
+        display: "flex",
+        flexDirection: "column",
       }}
       onMouseEnter={(e) => {
         e.currentTarget.style.borderColor = "var(--border-hover)";
@@ -86,6 +75,7 @@ export function KPICard({
         e.currentTarget.style.transform = "translateY(0)";
       }}
     >
+      {/* Accent top border */}
       <div
         style={{
           position: "absolute",
@@ -93,38 +83,44 @@ export function KPICard({
           left: 0,
           right: 0,
           height: 2,
-          background: `linear-gradient(90deg, ${colors.hex}, transparent)`,
+          background: `linear-gradient(90deg, ${accentColor}, transparent)`,
         }}
       />
 
-      <div className="flex items-center gap-2">
+      {/* Label row */}
+      <div
+        className="flex items-start gap-2"
+        style={{ minHeight: 36 }}
+      >
         {Icon && (
           <Icon
-            style={{ width: 16, height: 16, color: "var(--text-muted)", flexShrink: 0 }}
+            style={{ width: 18, height: 18, color: "var(--text-muted)", flexShrink: 0, marginTop: 1 }}
           />
         )}
         <span
           style={{
-            fontSize: 10,
+            fontSize: 12,
             fontWeight: 500,
             textTransform: "uppercase",
-            letterSpacing: "0.1em",
+            letterSpacing: "0.08em",
             fontFamily: "var(--font-data)",
-            color: "var(--text-secondary)",
+            color: "var(--text-muted)",
+            lineHeight: 1.3,
           }}
         >
           {label}
         </span>
       </div>
 
-      <div style={{ marginTop: 10 }}>
+      {/* Value */}
+      <div style={{ marginTop: 8 }}>
         {loading ? (
           <Shimmer width={100} height={32} />
         ) : (
           <span
             style={{
               fontSize: 32,
-              fontWeight: 700,
+              fontWeight: 600,
               fontFamily: "var(--font-data)",
               letterSpacing: -1,
               color: "var(--text-primary)",
@@ -142,68 +138,31 @@ export function KPICard({
         )}
       </div>
 
-      {delta !== undefined && (
-        <div className="flex items-center gap-2" style={{ marginTop: 10 }}>
-          {loading ? (
-            <Shimmer width={120} height={18} />
-          ) : (
-            <>
-              <span
-                className="inline-flex items-center gap-0.5 rounded-full px-1.5 py-0.5"
-                style={{
-                  fontSize: 11,
-                  fontWeight: 600,
-                  fontFamily: "var(--font-data)",
-                  background: isPositive ? "var(--success-dim)" : "var(--danger-dim)",
-                  color: isPositive ? "var(--success)" : "var(--danger)",
-                }}
-              >
-                {isPositive ? (
-                  <ArrowUp style={{ width: 11, height: 11 }} />
-                ) : (
-                  <ArrowDown style={{ width: 11, height: 11 }} />
-                )}
-                {Math.abs(delta).toFixed(1)}%
-              </span>
-              {deltaLabel && (
-                <span
-                  style={{
-                    fontSize: 11,
-                    color: "var(--text-muted)",
-                    fontFamily: "var(--font-data)",
-                  }}
-                >
-                  {deltaLabel}
-                </span>
-              )}
-            </>
-          )}
-        </div>
-      )}
-
-      <div style={{ marginTop: 12, height: 40 }}>
-        {sparkData && sparkData.length > 1 && !loading && (
-          <ResponsiveContainer width="100%" height="100%">
-            <AreaChart data={sparkData}>
-              <defs>
-                <linearGradient id={`spark-${label.replace(/\s/g, "")}`} x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="0%" stopColor={colors.hex} stopOpacity={0.3} />
-                  <stop offset="100%" stopColor={colors.hex} stopOpacity={0} />
-                </linearGradient>
-              </defs>
-              <Area
-                type="monotone"
-                dataKey="v"
-                stroke={colors.hex}
-                strokeWidth={1.5}
-                fill={`url(#spark-${label.replace(/\s/g, "")})`}
-                dot={false}
-                isAnimationActive={true}
-                animationDuration={200}
-              />
-            </AreaChart>
-          </ResponsiveContainer>
-        )}
+      {/* Delta badge */}
+      <div style={{ marginTop: 10 }}>
+        {loading ? (
+          <Shimmer width={64} height={22} />
+        ) : delta !== undefined ? (
+          <span
+            className="inline-flex items-center gap-1"
+            style={{
+              fontSize: 12,
+              fontWeight: 500,
+              fontFamily: "var(--font-data)",
+              background: isPositive ? "var(--success-dim)" : "var(--danger-dim)",
+              color: isPositive ? "var(--success)" : "var(--danger)",
+              padding: "3px 8px",
+              borderRadius: 4,
+            }}
+          >
+            {isPositive ? (
+              <ArrowUp style={{ width: 12, height: 12 }} />
+            ) : (
+              <ArrowDown style={{ width: 12, height: 12 }} />
+            )}
+            {Math.abs(delta).toFixed(1)}%
+          </span>
+        ) : null}
       </div>
     </div>
   );

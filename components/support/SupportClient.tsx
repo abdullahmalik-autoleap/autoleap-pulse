@@ -255,7 +255,6 @@ export function SupportClient() {
                 label="Open Tickets"
                 value={s?.openTickets ?? 0}
                 delta={s?.openDelta}
-                deltaLabel="vs prior period"
                 color={openTicketColor}
                 icon={Inbox}
                 loading={isLoading}
@@ -265,7 +264,6 @@ export function SupportClient() {
                 value={s?.avgResponseMin ?? 0}
                 suffix=" min"
                 delta={s?.avgResponseDelta}
-                deltaLabel="vs prior period"
                 color={avgResponseColor}
                 icon={Clock}
                 loading={isLoading}
@@ -275,7 +273,6 @@ export function SupportClient() {
                 value={s?.avgResolutionHrs ?? 0}
                 suffix=" hrs"
                 delta={s?.avgResolutionDelta}
-                deltaLabel="vs prior period"
                 color={avgResolutionColor}
                 icon={CheckCheck}
                 loading={isLoading}
@@ -285,7 +282,6 @@ export function SupportClient() {
                 value={s?.csatScore ?? 0}
                 suffix="/5"
                 delta={s?.csatDelta}
-                deltaLabel="vs prior period"
                 color="brand"
                 icon={Star}
                 loading={isLoading}
@@ -294,7 +290,6 @@ export function SupportClient() {
                 label="SLA Breaches"
                 value={s?.slaBreaches ?? 0}
                 delta={s?.slaDelta}
-                deltaLabel="vs prior period"
                 color={slaBreachColor}
                 icon={AlertTriangle}
                 loading={isLoading}
@@ -304,7 +299,6 @@ export function SupportClient() {
                 value={s?.resolutionRate ?? 0}
                 suffix="%"
                 delta={s?.resolutionRateDelta}
-                deltaLabel="vs prior period"
                 color="brand"
                 icon={BarChart2}
                 loading={isLoading}

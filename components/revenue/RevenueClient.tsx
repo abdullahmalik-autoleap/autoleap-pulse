@@ -258,7 +258,6 @@ export function RevenueClient() {
                 prefix="$"
                 suffix="K"
                 delta={s?.mrrDelta}
-                deltaLabel="MoM"
                 color="brand"
                 icon={DollarSign}
                 loading={isLoading}
@@ -269,7 +268,6 @@ export function RevenueClient() {
                 prefix="$"
                 suffix="K"
                 delta={s?.arrDelta}
-                deltaLabel="MoM"
                 color="brand"
                 icon={TrendingUp}
                 loading={isLoading}
@@ -280,7 +278,6 @@ export function RevenueClient() {
                 prefix="$"
                 suffix="K"
                 delta={s?.netNewMRRDelta}
-                deltaLabel="vs last month"
                 color={netNewColor as "success" | "danger"}
                 icon={Plus}
                 loading={isLoading}
@@ -290,7 +287,6 @@ export function RevenueClient() {
                 value={s?.arpu ?? 0}
                 prefix="$"
                 delta={s?.arpuDelta}
-                deltaLabel="MoM"
                 color="info"
                 icon={Users}
                 loading={isLoading}
@@ -300,7 +296,6 @@ export function RevenueClient() {
                 value={s?.ltv ?? 0}
                 prefix="$"
                 delta={s?.ltvDelta}
-                deltaLabel="MoM"
                 color="brand"
                 icon={Award}
                 loading={isLoading}
@@ -310,7 +305,6 @@ export function RevenueClient() {
                 value={s?.paybackPeriod ?? 0}
                 suffix=" mo"
                 delta={s?.paybackDelta}
-                deltaLabel="MoM"
                 color="warning"
                 icon={Clock}
                 loading={isLoading}

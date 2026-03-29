@@ -148,9 +148,6 @@ export function DashboardClient({ initialData }: DashboardClientProps) {
     color: SUPPORT_COLORS[c.category] ?? "var(--text-muted)",
   })), [data.topSupportCategories]);
 
-  const signupSparkline = useMemo(() => signupData.map((s) => s.signups), [signupData]);
-  const mrrSparkline = useMemo(() => mrrData.map((m) => m.mrr), [mrrData]);
-
   const metricsSnapshot: Record<string, unknown> = {
     newSignups: data.today.newSignups,
     activeShops: data.today.activeShops,
@@ -201,16 +198,13 @@ export function DashboardClient({ initialData }: DashboardClientProps) {
                 label="New Signups"
                 value={data.today.newSignups}
                 delta={data.today.newSignupsDelta}
-                deltaLabel="vs yesterday"
                 color="brand"
                 icon={UserPlus}
-                sparklineData={signupSparkline}
               />
               <KPICard
                 label="Active Shops"
                 value={data.today.activeShops}
                 delta={data.today.activeShopsDelta}
-                deltaLabel="MoM"
                 color="info"
                 icon={Store}
               />
@@ -220,17 +214,14 @@ export function DashboardClient({ initialData }: DashboardClientProps) {
                 prefix="$"
                 suffix="K"
                 delta={data.today.mrrDelta}
-                deltaLabel="MoM"
                 color="success"
                 icon={DollarSign}
-                sparklineData={mrrSparkline}
               />
               <KPICard
                 label="Churn Rate"
                 value={data.today.churnRate}
                 suffix="%"
                 delta={data.today.churnRateDelta}
-                deltaLabel="vs last month"
                 color="warning"
                 icon={TrendingDown}
               />
@@ -238,7 +229,6 @@ export function DashboardClient({ initialData }: DashboardClientProps) {
                 label="Open Tickets"
                 value={data.today.openTickets}
                 delta={data.today.openTicketsDelta}
-                deltaLabel="vs yesterday"
                 color="danger"
                 icon={HeadphonesIcon}
               />
@@ -246,7 +236,6 @@ export function DashboardClient({ initialData }: DashboardClientProps) {
                 label="NPS Score"
                 value={data.today.npsScore}
                 delta={data.today.npsDelta}
-                deltaLabel="vs last month"
                 color="brand"
                 icon={ThumbsUp}
               />
@@ -280,7 +269,7 @@ export function DashboardClient({ initialData }: DashboardClientProps) {
           </LazySection>
 
           <LazySection height={340}>
-            <div className="grid gap-4 grid-cols-1 lg:grid-cols-[55%_1fr]">
+            <div className="grid gap-4 grid-cols-1 lg:grid-cols-[55%_1fr] items-start">
               <ActivityFeed />
               <div className="flex flex-col gap-4">
                 <FeatureRequestsPanel data={data.topFeatureRequests} />

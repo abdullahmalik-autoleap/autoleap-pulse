@@ -67,47 +67,17 @@ export function PageHeader({
         borderBottom: "1px solid var(--pulse-border)",
       }}
     >
-      <div className="flex items-center gap-2.5">
-        <Icon
-          style={{
-            width: 20,
-            height: 20,
-            color: "var(--brand)",
-            flexShrink: 0,
-          }}
-        />
-        <div className="flex flex-col">
-          <h1
-            style={{
-              fontSize: 20,
-              fontWeight: 700,
-              color: "var(--text-primary)",
-              fontFamily: "var(--font-display)",
-              lineHeight: 1.2,
-            }}
-          >
-            {title}
-          </h1>
-          <nav className="flex items-center gap-1" style={{ marginTop: 1 }}>
-            {breadcrumbs.map((crumb, i) => (
-              <span key={i} className="flex items-center gap-1">
-                {i > 0 && (
-                  <span style={{ fontSize: 10, color: "var(--text-muted)" }}>/</span>
-                )}
-                <span
-                  style={{
-                    fontSize: 12,
-                    color: i === breadcrumbs.length - 1 ? "var(--text-secondary)" : "var(--text-muted)",
-                    fontFamily: "var(--font-data)",
-                  }}
-                >
-                  {crumb}
-                </span>
-              </span>
-            ))}
-          </nav>
-        </div>
-      </div>
+      <h1
+        style={{
+          fontSize: 20,
+          fontWeight: 700,
+          color: "var(--text-primary)",
+          fontFamily: "var(--font-display)",
+          lineHeight: 1,
+        }}
+      >
+        {title}
+      </h1>
 
       <div className="flex items-center" style={{ gap: 12 }}>
         <div
